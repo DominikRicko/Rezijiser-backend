@@ -16,20 +16,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.httpBasic();
-		http.authorizeRequests().antMatchers("/login", "/perform_login", "/register", "/perform_register", "/reset_password").permitAll();
+		http.authorizeRequests().antMatchers("/login", "/register", "/reset_password").permitAll();
 		http.authorizeRequests().antMatchers("/js/**", "/images/**", "/css/**").permitAll();
 		http.authorizeRequests().antMatchers("/e/**").authenticated();
 		http.authorizeRequests().antMatchers("/i/**").permitAll();
 		http.authorizeRequests().antMatchers("/key/**").permitAll();
 
-		http.authorizeRequests().antMatchers("/users").hasAuthority("READ_PROFILES");
-		http.authorizeRequests().antMatchers("/groups").hasAuthority("READ_GROUPS");
-		http.authorizeRequests().antMatchers("/privileges").hasAuthority("READ_PRIVILEGES");
-
 		http.authorizeRequests().anyRequest().authenticated();
-
-		http.formLogin().loginPage("/login").loginProcessingUrl("/perform_login").and().logout().logoutUrl("/perform_logout").deleteCookies("JSESSIONID");
-
+		//Look at how to make spring tell frontend to switch to login state.
+		http.formLogin().loginProcessingUrl("/login").and().logout().logoutUrl("/logout").deleteCookies("JSESSIONID");
 	}
 
 	@Bean
