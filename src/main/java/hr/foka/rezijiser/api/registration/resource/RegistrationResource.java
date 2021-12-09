@@ -1,9 +1,9 @@
 package hr.foka.rezijiser.api.registration.resource;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import hr.foka.rezijiser.domain.User;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RegistrationResource{
 
     @JsonProperty(value = "email", required = true)
