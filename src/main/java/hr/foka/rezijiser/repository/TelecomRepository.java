@@ -1,9 +1,11 @@
 package hr.foka.rezijiser.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import hr.foka.rezijiser.domain.Telecom;
 
-public interface TelecomRepository extends CrudRepository<Telecom, Long> {
+@Repository
+public interface TelecomRepository extends CrudRepository<Telecom, Integer> {
     
 }

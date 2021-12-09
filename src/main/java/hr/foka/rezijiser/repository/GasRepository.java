@@ -1,9 +1,11 @@
 package hr.foka.rezijiser.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import hr.foka.rezijiser.domain.Gas;
 
-public interface GasRepository extends CrudRepository<Gas, Long> {
+@Repository
+public interface GasRepository extends CrudRepository<Gas, Integer> {
     
 }

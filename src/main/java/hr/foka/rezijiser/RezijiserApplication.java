@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-//@EnableJpaRepositories("package path") uncomment when package with repositories exists.
+@EnableJpaRepositories("hr.foka.rezijiser.repository")
 public class RezijiserApplication {
 
 	public static void main(String[] args) {
