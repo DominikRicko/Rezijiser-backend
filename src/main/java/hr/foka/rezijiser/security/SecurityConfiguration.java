@@ -1,16 +1,40 @@
 package hr.foka.rezijiser.security;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+	private AuthenticationManager authenticationManager;
+	private UsernamePasswordAuthenticationFilter authenticationFilter;
+	private AuthenticationSuccessHandler authenticationSuccessHandler;
+	private AuthenticationFailureHandler authenticationFailureHandler;
+
+	public SecurityConfiguration(
+		AuthenticationManager authenticationManager, 
+		UsernamePasswordAuthenticationFilter authenticationFilter,
+		AuthenticationFailureHandler authenticationFailureHandler,
+		AuthenticationSuccessHandler authenticationSuccessHandler){
+		this.authenticationManager = authenticationManager;
+		this.authenticationFilter = authenticationFilter;
+		this.authenticationFailureHandler = authenticationFailureHandler;
+		this.authenticationSuccessHandler = authenticationSuccessHandler;
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/login", "/register", "/reset_password", "/js/**", "/images/**", "/css/**", "/i/**", "/favicon.ico", "/", "/index");
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -20,16 +44,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/js/**", "/images/**", "/css/**").permitAll();
 		http.authorizeRequests().antMatchers("/e/**").authenticated();
 		http.authorizeRequests().antMatchers("/i/**").permitAll();
-		http.authorizeRequests().antMatchers("/key/**").permitAll();
 
-		http.authorizeRequests().anyRequest().authenticated();
-		//Look at how to make spring tell frontend to switch to login state.
-		http.formLogin().loginProcessingUrl("/login").and().logout().logoutUrl("/logout").deleteCookies("JSESSIONID");
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		http.formLogin().successHandler(this.authenticationSuccessHandler).failureHandler(this.authenticationFailureHandler);
+		http.authenticationManager(this.authenticationManager);
+		http.addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		
 	}
 
 }
