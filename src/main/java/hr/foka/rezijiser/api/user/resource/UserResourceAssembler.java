@@ -1,7 +1,10 @@
 package hr.foka.rezijiser.api.user.resource;
 
+import org.springframework.stereotype.Service;
+
 import hr.foka.rezijiser.domain.User;
 
+@Service
 public class UserResourceAssembler {
     
     public UserResource toResource(User entity){

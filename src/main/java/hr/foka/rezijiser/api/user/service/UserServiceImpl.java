@@ -10,12 +10,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.user.resource.UserResource;
 import hr.foka.rezijiser.api.user.resource.UserResourceAssembler;
 import hr.foka.rezijiser.domain.User;
 import hr.foka.rezijiser.repository.UserRepository;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);

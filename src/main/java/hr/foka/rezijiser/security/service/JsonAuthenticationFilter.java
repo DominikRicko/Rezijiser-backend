@@ -1,5 +1,9 @@
 package hr.foka.rezijiser.security.service;
 
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +28,21 @@ public class JsonAuthenticationFilter extends UsernamePasswordAuthenticationFilt
     
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonAuthenticationFilter.class);
 
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
+
     private ThreadLocal<String> username;
     private ThreadLocal<String> password;
 
-    public JsonAuthenticationFilter(AuthenticationManager authenticationManager){
+    public JsonAuthenticationFilter(
+        AuthenticationManager authenticationManager,
+        AuthenticationSuccessHandler authenticationSuccessHandler,
+        AuthenticationFailureHandler authenticationFailureHandler){
+
         this.setAuthenticationManager(authenticationManager);
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.authenticationFailureHandler = authenticationFailureHandler;
+
         this.username = new ThreadLocal<>();
         this.password = new ThreadLocal<>();
     }
@@ -73,6 +90,16 @@ public class JsonAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         }
 
         return authentication;
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        authenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        authenticationFailureHandler.onAuthenticationFailure(request, response, failed);
     }
 
 }
