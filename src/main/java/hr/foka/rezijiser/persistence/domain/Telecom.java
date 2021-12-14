@@ -1,4 +1,4 @@
-package hr.foka.rezijiser.domain;
+package hr.foka.rezijiser.persistence.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,9 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Entity
-public class Power extends CommonTable{
-    
+@Entity(name = "telecommunications")
+public class Telecom extends CommonTable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -30,9 +30,6 @@ public class Power extends CommonTable{
 
     @Column(name = "date_paid")
     private LocalDate datePaid;
-
-    @Column(name ="counter")
-    private BigDecimal counter;
 
     public User getUser() {
         return this.user;
@@ -66,14 +63,6 @@ public class Power extends CommonTable{
         this.datePaid = datePaid;
     }
 
-    public BigDecimal getCounter() {
-        return this.counter;
-    }
-
-    public void setCounter(BigDecimal counter) {
-        this.counter = counter;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -81,7 +70,6 @@ public class Power extends CommonTable{
             ", cost='" + getCost() + "'" +
             ", payday='" + getPayday() + "'" +
             ", datePaid='" + getDatePaid() + "'" +
-            ", counter='" + getCounter() + "'" +
             "}";
     }
 

@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.registration.resource.RegistrationResource;
-import hr.foka.rezijiser.domain.User;
-import hr.foka.rezijiser.repository.UserRepository;
+import hr.foka.rezijiser.persistence.domain.User;
+import hr.foka.rezijiser.persistence.repository.UserRepository;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService{

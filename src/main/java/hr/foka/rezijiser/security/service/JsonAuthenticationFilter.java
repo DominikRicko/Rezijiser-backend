@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,8 +24,6 @@ import hr.foka.rezijiser.security.resource.LoginResource;
 @Service
 public class JsonAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonAuthenticationFilter.class);
-
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -81,8 +77,8 @@ public class JsonAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 
                 authentication = new UsernamePasswordAuthenticationToken(obtainUsername(request), obtainPassword(request));
                 authentication = this.getAuthenticationManager().authenticate(authentication);
+                authentication = super.attemptAuthentication(request, response);
             } catch (Exception e) {
-                LOGGER.error("Could not read JSON.", e);
                 return super.attemptAuthentication(request, response);
             }
         } else {

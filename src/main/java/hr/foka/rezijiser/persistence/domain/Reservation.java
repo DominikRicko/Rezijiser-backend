@@ -1,4 +1,4 @@
-package hr.foka.rezijiser.domain;
+package hr.foka.rezijiser.persistence.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,12 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Water extends CommonTable{
-    
+public class Reservation extends CommonTable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
@@ -30,9 +30,6 @@ public class Water extends CommonTable{
 
     @Column(name = "date_paid")
     private LocalDate datePaid;
-
-    @Column(name ="counter")
-    private BigDecimal counter;
 
     public User getUser() {
         return this.user;
@@ -66,14 +63,6 @@ public class Water extends CommonTable{
         this.datePaid = datePaid;
     }
 
-    public BigDecimal getCounter() {
-        return this.counter;
-    }
-
-    public void setCounter(BigDecimal counter) {
-        this.counter = counter;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -81,7 +70,6 @@ public class Water extends CommonTable{
             ", cost='" + getCost() + "'" +
             ", payday='" + getPayday() + "'" +
             ", datePaid='" + getDatePaid() + "'" +
-            ", counter='" + getCounter() + "'" +
             "}";
     }
 

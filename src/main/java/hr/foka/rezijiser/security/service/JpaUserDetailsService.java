@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import hr.foka.rezijiser.domain.User;
-import hr.foka.rezijiser.repository.UserRepository;
+import hr.foka.rezijiser.persistence.domain.User;
+import hr.foka.rezijiser.persistence.repository.UserRepository;
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService {

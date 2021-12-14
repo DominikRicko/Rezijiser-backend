@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.user.resource.UserResource;
 import hr.foka.rezijiser.api.user.resource.UserResourceAssembler;
-import hr.foka.rezijiser.domain.User;
-import hr.foka.rezijiser.repository.UserRepository;
+import hr.foka.rezijiser.persistence.domain.User;
+import hr.foka.rezijiser.persistence.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {

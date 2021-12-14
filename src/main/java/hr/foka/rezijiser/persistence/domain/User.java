@@ -1,8 +1,10 @@
-package hr.foka.rezijiser.domain;
+package hr.foka.rezijiser.persistence.domain;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,8 +14,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import hr.foka.rezijiser.persistence.service.ZonedDateTimeConverter;
+
 @Entity
-public class User extends CommonTable implements UserDetails{
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +32,40 @@ public class User extends CommonTable implements UserDetails{
     private Boolean enabled;
 
     private String password;
+
+    @Convert(converter = ZonedDateTimeConverter.class) 
+    private ZonedDateTime timeCreated;
+
+    @Convert(converter = ZonedDateTimeConverter.class) 
+    private ZonedDateTime timeModified;
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Boolean getEnabled() {
+        return this.enabled;
+    }
+
+    public ZonedDateTime getTimeCreated() {
+        return this.timeCreated;
+    }
+
+    public void setTimeCreated(ZonedDateTime timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public ZonedDateTime getTimeModified() {
+        return this.timeModified;
+    }
+
+    public void setTimeModified(ZonedDateTime timeModified) {
+        this.timeModified = timeModified;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -100,8 +138,11 @@ public class User extends CommonTable implements UserDetails{
         builder.append(super.toString());
         builder.append("name=").append(name);
         builder.append(", surname=").append(surname);
+        //builder.append(", password=").append(password);
         builder.append(", email=").append(email);
         builder.append(", enabled=").append(enabled);
+        builder.append(", timeCreated").append(timeCreated);
+        builder.append(", timeModified").append(timeModified);
         builder.append("]");
         return builder.toString();
     }

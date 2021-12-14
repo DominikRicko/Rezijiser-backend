@@ -1,4 +1,4 @@
-package hr.foka.rezijiser.domain;
+package hr.foka.rezijiser.persistence.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Hrt extends CommonTable{
+public class Trash extends CommonTable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

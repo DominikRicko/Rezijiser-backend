@@ -1,12 +1,18 @@
-package hr.foka.rezijiser.domain;
+package hr.foka.rezijiser.persistence.domain;
 
 import java.time.ZonedDateTime;
 
+import javax.persistence.Convert;
+
+import hr.foka.rezijiser.persistence.service.ZonedDateTimeConverter;
+
 public abstract class CommonTable {    
 
-    private ZonedDateTime timeCreated;
+    @Convert(converter = ZonedDateTimeConverter.class) 
+    protected ZonedDateTime timeCreated;
 
-    private ZonedDateTime timeModified;
+    @Convert(converter = ZonedDateTimeConverter.class) 
+    protected ZonedDateTime timeModified;
 
     public ZonedDateTime getTimeCreated() {
         return timeCreated;

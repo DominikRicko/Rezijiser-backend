@@ -2,7 +2,7 @@ package hr.foka.rezijiser.api.user.resource;
 
 import org.springframework.stereotype.Service;
 
-import hr.foka.rezijiser.domain.User;
+import hr.foka.rezijiser.persistence.domain.User;
 
 @Service
 public class UserResourceAssembler {
