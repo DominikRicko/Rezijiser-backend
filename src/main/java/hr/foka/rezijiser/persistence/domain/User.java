@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,9 +35,11 @@ public class User implements UserDetails{
     private String password;
 
     @Convert(converter = ZonedDateTimeConverter.class) 
+    @Column(nullable = true, insertable = false)
     private ZonedDateTime timeCreated;
 
-    @Convert(converter = ZonedDateTimeConverter.class) 
+    @Convert(converter = ZonedDateTimeConverter.class)
+    @Column(nullable = true, insertable = false)
     private ZonedDateTime timeModified;
 
     public Integer getId() {

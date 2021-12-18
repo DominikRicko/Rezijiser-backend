@@ -14,7 +14,7 @@
 	<name>rezijiser</name>
 	<description>Projekt za OKPP</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
