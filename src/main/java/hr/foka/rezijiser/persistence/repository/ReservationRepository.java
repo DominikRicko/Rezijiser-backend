@@ -7,5 +7,5 @@ import hr.foka.rezijiser.persistence.domain.Reservation;
 
 @Repository
 public interface ReservationRepository extends CrudRepository<Reservation, Integer> {
-    
+
 }

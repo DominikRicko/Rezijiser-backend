@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResource {
-    
+
     @JsonProperty(value = "name", required = true)
     private String name;
 
@@ -17,7 +17,6 @@ public class UserResource {
 
     @JsonProperty(value = "time_created", required = true)
     private String timeCreated;
-
 
     public String getName() {
         return this.name;
@@ -52,12 +51,13 @@ public class UserResource {
     }
 
     @Override
-    public String toString(){
-        StringBuilder builder = new StringBuilder("UserResource [");
+    public String toString() {
+        StringBuilder builder = new StringBuilder(UserResource.class.getName());
+        builder.append(" [");
         builder.append("email=").append(email);
-        builder.append(", name=").append(name);
-        builder.append(", surname=").append(surname);
-        builder.append(", timeCreated=").append(timeCreated);
+        builder.append(",name=").append(name);
+        builder.append(",surname=").append(surname);
+        builder.append(",timeCreated=").append(timeCreated);
         return builder.append("]").toString();
     }
 

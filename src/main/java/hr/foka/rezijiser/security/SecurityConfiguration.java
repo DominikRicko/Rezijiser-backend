@@ -18,8 +18,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private final JwtTokenFilter jwtTokenFilter;
 
 	public SecurityConfiguration(
-		UserDetailsService userDetailsService, 
-		JwtTokenFilter jwtTokenFilter){
+			UserDetailsService userDetailsService,
+			JwtTokenFilter jwtTokenFilter) {
 		this.userDetailsService = userDetailsService;
 		this.jwtTokenFilter = jwtTokenFilter;
 	}

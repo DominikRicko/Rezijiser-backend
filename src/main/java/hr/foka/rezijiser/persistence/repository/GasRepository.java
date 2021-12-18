@@ -7,5 +7,5 @@ import hr.foka.rezijiser.persistence.domain.Gas;
 
 @Repository
 public interface GasRepository extends CrudRepository<Gas, Integer> {
-    
+
 }

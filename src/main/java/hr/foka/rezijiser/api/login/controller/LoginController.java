@@ -19,18 +19,17 @@ import hr.foka.rezijiser.security.resource.LoginResource;
 import hr.foka.rezijiser.security.service.JwtTokenUtil;
 
 @RestController
-@RequestMapping(path="/login")
+@RequestMapping(path = "/login")
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public LoginController(
-        AuthenticationManager authenticationManager,
-        JwtTokenUtil jwtTokenUtil,
-        UserDetailsService userDetailsService
-        ) {
+            AuthenticationManager authenticationManager,
+            JwtTokenUtil jwtTokenUtil,
+            UserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
@@ -40,19 +39,17 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestBody @Validated LoginResource request) {
         try {
             Authentication authenticate = authenticationManager
-                .authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                        request.getUsername(), request.getPassword()
-                    )
-                );
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getUsername(), request.getPassword()));
 
             UserDetails user = userDetailsService.loadUserByUsername((String) authenticate.getPrincipal());
 
             return ResponseEntity.ok()
-                .header(
-                    HttpHeaders.AUTHORIZATION,
-                    jwtTokenUtil.generateToken(user)
-                ).build();
+                    .header(
+                            HttpHeaders.AUTHORIZATION,
+                            jwtTokenUtil.generateToken(user))
+                    .build();
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

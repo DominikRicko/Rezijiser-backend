@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RegistrationResource{
+public class RegistrationResource {
 
     @JsonProperty(value = "email", required = true)
     private String email;
@@ -52,11 +52,11 @@ public class RegistrationResource{
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("RegistrationResource [");
-        builder.append(super.toString());
+        StringBuilder builder = new StringBuilder(RegistrationResource.class.getName());
+        builder.append(" [");
         builder.append("name=").append(name);
-        builder.append(", surname=").append(surname);
-        builder.append(", email=").append(email);
+        builder.append(",surname=").append(surname);
+        builder.append(",email=").append(email);
         builder.append("]");
         return builder.toString();
     }

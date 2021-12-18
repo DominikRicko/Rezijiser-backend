@@ -13,16 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-
 @RestController
 @RequestMapping(path = "/e/api/v1/user")
 public class UserController {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private UserResourceAssembler userAssembler;
 
-    public UserController(UserResourceAssembler userAssembler){
+    public UserController(UserResourceAssembler userAssembler) {
         this.userAssembler = userAssembler;
     }
 

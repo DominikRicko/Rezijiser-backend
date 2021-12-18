@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import hr.foka.rezijiser.persistence.service.ZonedDateTimeConverter;
 
 @Entity
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +34,12 @@ public class User implements UserDetails{
 
     private String password;
 
-    @Convert(converter = ZonedDateTimeConverter.class) 
-    @Column(nullable = true, insertable = false)
+    @Convert(converter = ZonedDateTimeConverter.class)
+    @Column(nullable = true, insertable = false, updatable = false)
     private ZonedDateTime timeCreated;
 
     @Convert(converter = ZonedDateTimeConverter.class)
-    @Column(nullable = true, insertable = false)
+    @Column(nullable = true, insertable = false, updatable = false)
     private ZonedDateTime timeModified;
 
     public Integer getId() {
@@ -76,7 +76,7 @@ public class User implements UserDetails{
     }
 
     @Override
-    //Will return user's email.
+    // Will return user's email.
     public String getUsername() {
         return email;
     }
@@ -128,20 +128,20 @@ public class User implements UserDetails{
         this.enabled = enabled;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String passwordHash){
+    public void setPassword(String passwordHash) {
         this.password = passwordHash;
     }
 
-    public String toString(){
-        StringBuilder builder = new StringBuilder("User [");
-        builder.append(super.toString());
+    public String toString() {
+        StringBuilder builder = new StringBuilder(User.class.getName());
+        builder.append(" [");
         builder.append("name=").append(name);
         builder.append(", surname=").append(surname);
-        //builder.append(", password=").append(password);
+        // builder.append(", password=").append(password);
         builder.append(", email=").append(email);
         builder.append(", enabled=").append(enabled);
         builder.append(", timeCreated").append(timeCreated);

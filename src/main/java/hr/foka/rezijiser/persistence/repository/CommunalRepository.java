@@ -7,5 +7,5 @@ import hr.foka.rezijiser.persistence.domain.Communal;
 
 @Repository
 public interface CommunalRepository extends CrudRepository<Communal, Integer> {
-    
+
 }

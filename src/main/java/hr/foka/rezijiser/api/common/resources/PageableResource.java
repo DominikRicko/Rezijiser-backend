@@ -18,11 +18,11 @@ public class PageableResource implements Pageable {
     @JsonProperty(value = "sort")
     private SortDirection sort;
 
-    private enum SortDirection{
+    private enum SortDirection {
         ASC, DESC
     }
 
-    public PageableResource(Integer page, Integer size){
+    public PageableResource(Integer page, Integer size) {
         this.page = page;
         this.size = size;
     }
@@ -34,7 +34,7 @@ public class PageableResource implements Pageable {
 
     @Override
     public long getOffset() {
-        return page*size;
+        return page * size;
     }
 
     @Override
@@ -50,11 +50,11 @@ public class PageableResource implements Pageable {
     @Override
     public Sort getSort() {
 
-        switch(this.sort){
-            case ASC:{
-                
+        switch (this.sort) {
+            case ASC: {
+
             }
-            case DESC:{
+            case DESC: {
 
             }
         }
@@ -73,9 +73,9 @@ public class PageableResource implements Pageable {
 
     @Override
     public Pageable previousOrFirst() {
-        if(this.page == 0){
+        if (this.page == 0) {
             return this;
-        } else if(this.page > 0 ){
+        } else if (this.page > 0) {
             return new PageableResource(this.page - 1, this.size);
         } else {
             return new PageableResource(0, this.size);

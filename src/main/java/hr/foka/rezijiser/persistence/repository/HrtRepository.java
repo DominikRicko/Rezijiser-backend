@@ -7,5 +7,5 @@ import hr.foka.rezijiser.persistence.domain.Hrt;
 
 @Repository
 public interface HrtRepository extends CrudRepository<Hrt, Integer> {
-    
+
 }

@@ -23,15 +23,15 @@ import io.jsonwebtoken.SignatureException;
 
 @Service
 public class JwtTokenFilter extends OncePerRequestFilter {
-    
+
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsService userDetailsService;
     private final ApplicationProperties applicationProperties;
 
     public JwtTokenFilter(
-        JwtTokenUtil jwtTokenUtil,
-        UserDetailsService userDetailsService,
-        ApplicationProperties applicationProperties){
+            JwtTokenUtil jwtTokenUtil,
+            UserDetailsService userDetailsService,
+            ApplicationProperties applicationProperties) {
 
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
@@ -39,18 +39,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String header = request.getHeader(applicationProperties.getHeaderString());
         String authToken = getAuthToken(header);
         String username = getUsernameFromToken(authToken);
-        
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, Arrays.asList(new SimpleGrantedAuthority("ROLE_ANY")));
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, Arrays.asList(new SimpleGrantedAuthority("ROLE_ANY")));
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 logger.info("authenticated user " + username + ", setting security context");
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -60,17 +62,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getAuthToken(String header){
+    private String getAuthToken(String header) {
         if (header != null && header.startsWith(applicationProperties.getTokenPrefix())) {
-            return header.replace(applicationProperties.getTokenPrefix(),"");
+            return header.replace(applicationProperties.getTokenPrefix(), "");
         } else {
             logger.warn("couldn't find bearer string, will ignore the header");
         }
         return null;
     }
 
-    private String getUsernameFromToken(String authToken){
-        if(authToken == null)
+    private String getUsernameFromToken(String authToken) {
+        if (authToken == null)
             return null;
 
         try {
@@ -79,7 +81,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             logger.error("an error occured during getting username from token", e);
         } catch (ExpiredJwtException e) {
             logger.warn("the token is expired and not valid anymore", e);
-        } catch(SignatureException e){
+        } catch (SignatureException e) {
             logger.error("Authentication Failed. Username or Password not valid.");
         }
         return null;

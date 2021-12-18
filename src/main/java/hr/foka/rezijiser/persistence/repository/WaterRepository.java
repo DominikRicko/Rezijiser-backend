@@ -7,5 +7,5 @@ import hr.foka.rezijiser.persistence.domain.Water;
 
 @Repository
 public interface WaterRepository extends CrudRepository<Water, Integer> {
-    
+
 }

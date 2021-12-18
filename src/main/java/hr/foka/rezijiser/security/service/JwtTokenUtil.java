@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    private ApplicationProperties applicationProperties;
+    private final ApplicationProperties applicationProperties;
 
     public JwtTokenUtil(ApplicationProperties applicationProperties) {
         this.applicationProperties = applicationProperties;
@@ -55,12 +55,13 @@ public class JwtTokenUtil implements Serializable {
         claims.put("scopes", Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 
         return Jwts.builder()
-        .setClaims(claims)
-        .setIssuer(applicationProperties.getIssuer())
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + applicationProperties.getAccessTokenValidityMiliseconds()))
-        .signWith(SignatureAlgorithm.HS256, applicationProperties.getSigningKey())
-        .compact();
+                .setClaims(claims)
+                .setIssuer(applicationProperties.getIssuer())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(
+                        System.currentTimeMillis() + applicationProperties.getAccessTokenValidityMiliseconds()))
+                .signWith(SignatureAlgorithm.HS256, applicationProperties.getSigningKey())
+                .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

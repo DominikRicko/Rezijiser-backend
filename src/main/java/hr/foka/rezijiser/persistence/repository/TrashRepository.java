@@ -7,5 +7,5 @@ import hr.foka.rezijiser.persistence.domain.Trash;
 
 @Repository
 public interface TrashRepository extends CrudRepository<Trash, Integer> {
-    
+
 }

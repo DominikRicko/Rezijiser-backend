@@ -7,5 +7,5 @@ import hr.foka.rezijiser.persistence.domain.Telecom;
 
 @Repository
 public interface TelecomRepository extends CrudRepository<Telecom, Integer> {
-    
+
 }

@@ -6,8 +6,8 @@ import hr.foka.rezijiser.persistence.domain.User;
 
 @Service
 public class UserResourceAssembler {
-    
-    public UserResource toResource(User entity){
+
+    public UserResource toResource(User entity) {
 
         UserResource resource = new UserResource();
 

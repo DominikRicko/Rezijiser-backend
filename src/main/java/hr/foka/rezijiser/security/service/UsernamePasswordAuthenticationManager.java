@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsernamePasswordAuthenticationManager implements AuthenticationManager {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsernamePasswordAuthenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
+    public UsernamePasswordAuthenticationManager(UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -27,13 +28,12 @@ public class UsernamePasswordAuthenticationManager implements AuthenticationMana
         String password = authentication.getCredentials().toString();
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if(passwordEncoder.matches(password, userDetails.getPassword())){
+        if (passwordEncoder.matches(password, userDetails.getPassword())) {
             return authentication;
-        }
-        else{
+        } else {
             throw new BadCredentialsException("Password hashes do not match.");
         }
 
     }
-    
+
 }

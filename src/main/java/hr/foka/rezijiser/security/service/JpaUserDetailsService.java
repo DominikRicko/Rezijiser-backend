@@ -13,23 +13,22 @@ import hr.foka.rezijiser.persistence.repository.UserRepository;
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public JpaUserDetailsService(UserRepository userRepository){
+    public JpaUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        
+
         Optional<User> user = userRepository.findByEmail(username);
 
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
-        }
-        else{
+        } else {
             throw new UsernameNotFoundException("Email: " + username);
         }
     }
-    
+
 }

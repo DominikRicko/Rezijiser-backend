@@ -14,17 +14,17 @@ import hr.foka.rezijiser.api.registration.service.RegistrationService;
 @RestController
 @RequestMapping(path = "/register")
 public class RegistrationController {
-        
+
     private static Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
     private RegistrationService registrationService;
 
-    public RegistrationController(RegistrationService registrationService){
+    public RegistrationController(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> registerAccount(@RequestBody RegistrationResource resource){
+    public ResponseEntity<?> registerAccount(@RequestBody RegistrationResource resource) {
         LOGGER.debug("Getting registration request.");
         return registrationService.registerUser(resource);
     }

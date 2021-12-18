@@ -12,7 +12,7 @@ import hr.foka.rezijiser.persistence.domain.User;
 import hr.foka.rezijiser.persistence.repository.UserRepository;
 
 @Service
-public class RegistrationServiceImpl implements RegistrationService{
+public class RegistrationServiceImpl implements RegistrationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationServiceImpl.class);
 
@@ -20,7 +20,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     private PasswordEncoder passwordEncoder;
 
-    public RegistrationServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public RegistrationServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -30,7 +30,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
         LOGGER.debug("Attempting to register new user with info: ", userInfo);
 
-        if(checkIfEmailExists(userInfo.getEmail())){
+        if (checkIfEmailExists(userInfo.getEmail())) {
             LOGGER.info("Email {} is already in use.", userInfo.getEmail());
             return new ResponseEntity<>("Email is already in use.", HttpStatus.CONFLICT);
         }
@@ -42,11 +42,11 @@ public class RegistrationServiceImpl implements RegistrationService{
         return new ResponseEntity<>("Registration successful", HttpStatus.OK);
     }
 
-    private boolean checkIfEmailExists(String email){
+    private boolean checkIfEmailExists(String email) {
         return userRepository.existsByEmail(email);
     }
 
-    private User createUser(RegistrationResource resource){
+    private User createUser(RegistrationResource resource) {
         User user = new User();
         user.setEmail(resource.getEmail());
         user.setName(resource.getName());
@@ -56,6 +56,6 @@ public class RegistrationServiceImpl implements RegistrationService{
         user.setEnabled(true);
 
         return user;
-    }    
-    
+    }
+
 }

@@ -12,14 +12,14 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class SecurityBeansConfiguration {
-    
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
-	public CorsFilter corsFilter(){
+	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration cors = new CorsConfiguration();
 		cors.setAllowCredentials(true);
