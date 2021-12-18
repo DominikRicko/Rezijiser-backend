@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import hr.foka.rezijiser.api.user.service.UserService;
+import hr.foka.rezijiser.api.user.resource.UserResourceAssembler;
 import hr.foka.rezijiser.persistence.domain.User;
 
 import org.slf4j.Logger;
@@ -15,26 +15,21 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 
 @RestController
-@RequestMapping(path = "/e/api/v1/users")
+@RequestMapping(path = "/e/api/v1/user")
 public class UserController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    private UserService userService;
+    private UserResourceAssembler userAssembler;
 
-    public UserController(UserService userService){
-        this.userService = userService;
+    public UserController(UserResourceAssembler userAssembler){
+        this.userAssembler = userAssembler;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> getMethodName() {
-        LOGGER.info("Received Get request for Users.");
-        return userService.getUsers();
-    }
-    
-    @RequestMapping(path="/current", method = RequestMethod.GET)
-    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal User user){
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<?> getMethodName(@AuthenticationPrincipal User user) {
+        LOGGER.info("Received GET request for User.");
+        return new ResponseEntity<>(userAssembler.toResource(user), HttpStatus.OK);
     }
 
 }
