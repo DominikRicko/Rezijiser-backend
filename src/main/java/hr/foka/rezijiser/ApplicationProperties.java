@@ -11,34 +11,42 @@ public class ApplicationProperties {
     private String signing_key;
     private String token_prefix;
     private String header_string;
+    private String issuer;
 
-    public long getAccess_token_validity_minutes() {
+    public long getAccessTokenValidityMinutes() {
         return access_token_validity_minutes;
     }
-    public void setAccess_token_validity_minutes(long access_token_validity_minutes) {
+    public void setAccessTokenValidityMinutes(long access_token_validity_minutes) {
         this.access_token_validity_minutes = access_token_validity_minutes;
     }
-    public String getSigning_key() {
+    public String getSigningKey() {
         return signing_key;
     }
-    public void setSigning_key(String signing_key) {
+    public void setSigningKey(String signing_key) {
         this.signing_key = signing_key;
     }
-    public String getToken_prefix() {
+    public String getTokenPrefix() {
         return token_prefix;
     }
-    public void setToken_prefix(String token_prefix) {
+    public void setTokenPrefix(String token_prefix) {
         this.token_prefix = token_prefix;
     }
-    public String getHeader_string() {
+    public String getHeaderString() {
         return header_string;
     }
-    public void setHeader_string(String header_string) {
+    public void setHeaderString(String header_string) {
         this.header_string = header_string;
     }
-    public Long getAccess_token_validity_miliseconds(){
+    public Long getAccessTokenValidityMiliseconds(){
         return access_token_validity_minutes*60*1000;
     }
 
+    public String getIssuer() {
+        return this.issuer.trim();
+    }
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
+    }
     
 }

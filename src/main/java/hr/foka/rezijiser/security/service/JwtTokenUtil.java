@@ -37,7 +37,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(applicationProperties.getSigning_key()).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(applicationProperties.getSigningKey()).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -54,7 +54,13 @@ public class JwtTokenUtil implements Serializable {
         Claims claims = Jwts.claims().setSubject(subject);
         claims.put("scopes", Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 
-        return Jwts.builder().setClaims(claims).setIssuer("http://www.localhost:8080").setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + applicationProperties.getAccess_token_validity_miliseconds())).signWith(SignatureAlgorithm.HS256, applicationProperties.getSigning_key()).compact();
+        return Jwts.builder()
+        .setClaims(claims)
+        .setIssuer(applicationProperties.getIssuer())
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + applicationProperties.getAccessTokenValidityMiliseconds()))
+        .signWith(SignatureAlgorithm.HS256, applicationProperties.getSigningKey())
+        .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

@@ -14,8 +14,8 @@ import hr.foka.rezijiser.security.service.JwtTokenFilter;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private UserDetailsService userDetailsService;
-	private JwtTokenFilter jwtTokenFilter;
+	private final UserDetailsService userDetailsService;
+	private final JwtTokenFilter jwtTokenFilter;
 
 	public SecurityConfiguration(
 		UserDetailsService userDetailsService, 

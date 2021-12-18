@@ -41,23 +41,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String header = request.getHeader(applicationProperties.getHeader_string());
-        String username = null;
-        String authToken = null;
-        if (header != null && header.startsWith(applicationProperties.getToken_prefix())) {
-            authToken = header.replace(applicationProperties.getToken_prefix(),"");
-            try {
-                username = jwtTokenUtil.getUsernameFromToken(authToken);
-            } catch (IllegalArgumentException e) {
-                logger.error("an error occured during getting username from token", e);
-            } catch (ExpiredJwtException e) {
-                logger.warn("the token is expired and not valid anymore", e);
-            } catch(SignatureException e){
-                logger.error("Authentication Failed. Username or Password not valid.");
-            }
-        } else {
-            logger.warn("couldn't find bearer string, will ignore the header");
-        }
+        String header = request.getHeader(applicationProperties.getHeaderString());
+        String authToken = getAuthToken(header);
+        String username = getUsernameFromToken(authToken);
+        
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -71,6 +58,31 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String getAuthToken(String header){
+        if (header != null && header.startsWith(applicationProperties.getTokenPrefix())) {
+            return header.replace(applicationProperties.getTokenPrefix(),"");
+        } else {
+            logger.warn("couldn't find bearer string, will ignore the header");
+        }
+        return null;
+    }
+
+    private String getUsernameFromToken(String authToken){
+        if(authToken == null)
+            return null;
+
+        try {
+            return jwtTokenUtil.getUsernameFromToken(authToken);
+        } catch (IllegalArgumentException e) {
+            logger.error("an error occured during getting username from token", e);
+        } catch (ExpiredJwtException e) {
+            logger.warn("the token is expired and not valid anymore", e);
+        } catch(SignatureException e){
+            logger.error("Authentication Failed. Username or Password not valid.");
+        }
+        return null;
     }
 
 }
