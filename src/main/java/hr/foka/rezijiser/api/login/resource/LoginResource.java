@@ -1,4 +1,4 @@
-package hr.foka.rezijiser.security.resource;
+package hr.foka.rezijiser.api.login.resource;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,18 +6,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginResource {
     
-    @JsonProperty(value = "username")
-    private String username;
+    @JsonProperty(value = "email")
+    private String email;
 
     @JsonProperty(value = "password")
     private String password;
 
-    public String getUsername() {
-        return this.username;
+    public String getEmail() {
+        return this.email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -30,9 +30,9 @@ public class LoginResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("LoginResource [");
-        builder.append(super.toString());
-        builder.append("username=").append(username);
+        StringBuilder builder = new StringBuilder(LoginResource.class.getName());
+        builder.append(" [");
+        builder.append("email=").append(email);
         //builder.append(", password=").append(password);
         builder.append("]");
         return builder.toString();
