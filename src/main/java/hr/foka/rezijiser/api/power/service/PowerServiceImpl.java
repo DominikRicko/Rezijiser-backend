@@ -1,10 +1,13 @@
 package hr.foka.rezijiser.api.power.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import hr.foka.rezijiser.api.common.resources.PageableResource;
+import hr.foka.rezijiser.api.common.resources.ResourcePage;
 import hr.foka.rezijiser.api.power.resources.PowerResource;
 import hr.foka.rezijiser.api.power.resources.PowerResourceAssembler;
 import hr.foka.rezijiser.persistence.domain.Power;
@@ -28,9 +31,12 @@ public class PowerServiceImpl implements PowerService {
     }
 
     @Override
-    public ResponseEntity<?> getResources(User user, PageableResource gridResource) {
-        // TODO Auto-generated method stub
-        return null;
+    public ResponseEntity<?> getResources(User user, ResourcePage gridResource) {
+        Pageable pageable = PageRequest.of(gridResource.getPageNumber(), gridResource.getPageSize(),
+                gridResource.getSortDirection(), gridResource.getSortBy());
+        Page<Power> page = repository.findAllByUser(user, pageable);
+        Page<PowerResource> resource = page.map(it -> assembler.toResource(it));
+        return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
     @Override

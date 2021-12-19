@@ -30,10 +30,12 @@ public class LoginServiceImpl implements LoginService {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
     }
+
     @Override
     public ResponseEntity<?> authenticate(LoginResource resource) {
 
-        AbstractAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(resource.getEmail(), resource.getPassword());
+        AbstractAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(resource.getEmail(),
+                resource.getPassword());
 
         try {
             Authentication authenticate = authenticationManager.authenticate(authToken);
@@ -48,5 +50,5 @@ public class LoginServiceImpl implements LoginService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    
+
 }
