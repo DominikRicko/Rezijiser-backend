@@ -17,7 +17,12 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    private final ApplicationProperties applicationProperties;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7187513894373085491L;
+	
+	private final ApplicationProperties applicationProperties;
 
     public JwtTokenUtil(ApplicationProperties applicationProperties) {
         this.applicationProperties = applicationProperties;

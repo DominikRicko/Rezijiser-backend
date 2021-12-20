@@ -20,7 +20,12 @@ import hr.foka.rezijiser.persistence.service.ZonedDateTimeConverter;
 @Entity
 public class User implements UserDetails {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3376147386529824339L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ import hr.foka.rezijiser.persistence.domain.Power;
 import hr.foka.rezijiser.persistence.domain.User;
 
 @Repository
-public interface PowerRepository extends PagingAndSortingRepository<Power, Integer> {
+public interface PowerRepository extends PagingAndSortingRepository<Power, Integer>, QuerydslPredicateExecutor<Power> {
 
     List<Power> findByUser(User user);
 

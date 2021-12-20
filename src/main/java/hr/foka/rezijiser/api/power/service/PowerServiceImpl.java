@@ -1,5 +1,7 @@
 package hr.foka.rezijiser.api.power.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,7 @@ import hr.foka.rezijiser.api.common.resources.ResourcePage;
 import hr.foka.rezijiser.api.power.resources.PowerResource;
 import hr.foka.rezijiser.api.power.resources.PowerResourceAssembler;
 import hr.foka.rezijiser.persistence.domain.Power;
+import hr.foka.rezijiser.persistence.domain.QPower;
 import hr.foka.rezijiser.persistence.domain.User;
 import hr.foka.rezijiser.persistence.repository.PowerRepository;
 
@@ -70,6 +73,10 @@ public class PowerServiceImpl implements PowerService {
             return new ResponseEntity<>("Deleted.", HttpStatus.OK);
         }
 
+    }
+
+    public void whatever(User user, Pageable pageable){
+        repository.findAll(QPower.power.cost.between(new BigDecimal("0.79"), new BigDecimal("500.00")), pageable);
     }
 
 }
