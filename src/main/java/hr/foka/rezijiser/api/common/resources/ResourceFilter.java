@@ -13,10 +13,10 @@ public class ResourceFilter {
 
     public static enum TargetColumn{
 
-        COST("cost"),
-        PAYDAY("payday"),
-        DATEPAID("date_paid"),
-        COUNTER("counter");
+        @JsonProperty("cost") COST("cost"),
+        @JsonProperty("payday") PAYDAY("payday"),
+        @JsonProperty("datePaid") DATEPAID("date_paid"),
+        @JsonProperty("counter") COUNTER("counter");
 
         TargetColumn(String columnName){
             this.columnName = columnName;

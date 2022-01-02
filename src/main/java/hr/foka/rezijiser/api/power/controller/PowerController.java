@@ -33,7 +33,7 @@ public class PowerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/paged")
-    public ResponseEntity<?> getPowerBills(@AuthenticationPrincipal User user, ResourcePage page){
+    public ResponseEntity<?> getPowerBills(@AuthenticationPrincipal User user, @RequestBody ResourcePage page){
         LOGGER.debug("Received POST request to fetch paged power");
         return service.getResources(user, page);
     }

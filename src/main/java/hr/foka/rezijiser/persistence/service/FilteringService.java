@@ -1,6 +1,7 @@
 package hr.foka.rezijiser.persistence.service;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -31,7 +32,7 @@ public abstract class FilteringService {
 
     public abstract BooleanExpression filterByDatePaidBetween(LocalDate gt, LocalDate lt);
 
-    public BooleanExpression processFilters(BooleanExpression startingFilter, ResourceFilter[] filters) {
+    public BooleanExpression processFilters(BooleanExpression startingFilter, Collection<ResourceFilter> filters) {
 
         for (ResourceFilter filter : filters) {
 

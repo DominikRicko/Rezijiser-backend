@@ -43,6 +43,7 @@ public class PowerServiceImpl implements PowerService {
         } else {
             pageable = PageRequest.of(gridResource.getPageNumber(), gridResource.getPageSize());
         }
+
         BooleanExpression filter = filteringService.processFilters(filteringService.filterForUser(user), gridResource.getFilters());
 
         Page<Power> page = repository.findAll(filter, pageable);

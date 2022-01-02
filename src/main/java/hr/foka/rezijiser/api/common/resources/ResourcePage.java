@@ -1,13 +1,13 @@
 package hr.foka.rezijiser.api.common.resources;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Collection;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.domain.Sort;
 
 import hr.foka.rezijiser.api.common.resources.ResourceFilter.TargetColumn;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourcePage {
 
     @JsonProperty("pageNumber")
@@ -23,7 +23,7 @@ public class ResourcePage {
     private TargetColumn sortBy = TargetColumn.PAYDAY;
 
     @JsonProperty("filters")
-    private ResourceFilter[] filters;
+    private Collection<ResourceFilter> filters;
 
     public int getPageNumber() {
         return this.pageNumber;
@@ -57,11 +57,11 @@ public class ResourcePage {
         this.sortBy = sortBy;
     }
 
-    public ResourceFilter[] getFilters() {
+    public Collection<ResourceFilter> getFilters() {
         return this.filters;
     }
 
-    public void setFilters(ResourceFilter[] filters) {
+    public void setFilters(Collection<ResourceFilter> filters) {
         this.filters = filters;
     }
 
@@ -70,9 +70,10 @@ public class ResourcePage {
         StringBuilder builder = new StringBuilder(ResourcePage.class.getName());
         builder.append(" [");
         builder.append("pageNumber=").append(pageNumber);
-        builder.append(",pageSize=").append(pageSize);
-        builder.append(",sortDirection=").append(sortDirection);
-        builder.append(",sortBy=").append(sortBy);
+        builder.append(", pageSize=").append(pageSize);
+        builder.append(", sortDirection=").append(sortDirection);
+        builder.append(", sortBy=").append(sortBy);
+        builder.append(", filters=").append(filters);
         builder.append("]");
         return builder.toString();
     }
