@@ -1,5 +1,7 @@
 package hr.foka.rezijiser.api.common.resources;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,10 +15,10 @@ public abstract class CommonResource {
     protected String cost;
 
     @JsonProperty("payday")
-    protected String payday;
+    protected LocalDate payday;
 
     @JsonProperty("datePaid")
-    protected String datePaid;
+    protected LocalDate datePaid;
 
     public Integer getId() {
         return this.id;
@@ -34,19 +36,19 @@ public abstract class CommonResource {
         this.cost = cost;
     }
 
-    public String getPayday() {
+    public LocalDate getPayday() {
         return this.payday;
     }
 
-    public void setPayday(String payday) {
+    public void setPayday(LocalDate payday) {
         this.payday = payday;
     }
 
-    public String getDatePaid() {
+    public LocalDate getDatePaid() {
         return this.datePaid;
     }
 
-    public void setDatePaid(String datePaid) {
+    public void setDatePaid(LocalDate datePaid) {
         this.datePaid = datePaid;
     }
 

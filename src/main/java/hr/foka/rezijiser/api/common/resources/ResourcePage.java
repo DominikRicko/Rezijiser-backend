@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.domain.Sort;
 
+import hr.foka.rezijiser.api.common.resources.ResourceFilter.TargetColumn;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourcePage {
 
@@ -15,10 +17,13 @@ public class ResourcePage {
     private int pageSize = 10;
 
     @JsonProperty("sortDirection")
-    private Sort.Direction sortDirection = Sort.Direction.ASC;
+    private Sort.Direction sortDirection;
 
     @JsonProperty("sortBy")
-    private String sortBy = "payday";
+    private TargetColumn sortBy = TargetColumn.PAYDAY;
+
+    @JsonProperty("filters")
+    private ResourceFilter[] filters;
 
     public int getPageNumber() {
         return this.pageNumber;
@@ -44,12 +49,20 @@ public class ResourcePage {
         this.sortDirection = sortDirection;
     }
 
-    public String getSortBy() {
+    public TargetColumn getSortBy() {
         return this.sortBy;
     }
 
-    public void setSortBy(String sortBy) {
+    public void setSortBy(TargetColumn sortBy) {
         this.sortBy = sortBy;
+    }
+
+    public ResourceFilter[] getFilters() {
+        return this.filters;
+    }
+
+    public void setFilters(ResourceFilter[] filters) {
+        this.filters = filters;
     }
 
     @Override

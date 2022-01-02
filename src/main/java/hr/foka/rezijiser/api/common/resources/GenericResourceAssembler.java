@@ -3,14 +3,14 @@ package hr.foka.rezijiser.api.common.resources;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import hr.foka.rezijiser.api.common.service.LocalDateParser;
+import hr.foka.rezijiser.api.common.converters.LocalDateConverter;
 import hr.foka.rezijiser.persistence.domain.User;
 
 public abstract class GenericResourceAssembler<ENTITY, RESOURCE> {
 
-    protected final LocalDateParser dateConverter;
+    protected final LocalDateConverter dateConverter;
 
-    protected GenericResourceAssembler(LocalDateParser dateConverter) {
+    protected GenericResourceAssembler(LocalDateConverter dateConverter) {
         this.dateConverter = dateConverter;
     }
 

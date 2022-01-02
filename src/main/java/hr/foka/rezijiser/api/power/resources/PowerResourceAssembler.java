@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
+import hr.foka.rezijiser.api.common.converters.LocalDateConverter;
 import hr.foka.rezijiser.api.common.resources.GenericResourceAssembler;
-import hr.foka.rezijiser.api.common.service.LocalDateParser;
 import hr.foka.rezijiser.persistence.domain.Power;
 import hr.foka.rezijiser.persistence.domain.User;
 
 @Service
 public class PowerResourceAssembler extends GenericResourceAssembler<Power, PowerResource> {
 
-    public PowerResourceAssembler(LocalDateParser dateConverter) {
+    public PowerResourceAssembler(LocalDateConverter dateConverter) {
         super(dateConverter);
     }
 
@@ -25,12 +25,12 @@ public class PowerResourceAssembler extends GenericResourceAssembler<Power, Powe
         resource.setCounter(entity.getCounter().toString());
 
         if (entity.getDatePaid() != null) {
-            resource.setDatePaid(entity.getDatePaid().toString());
+            resource.setDatePaid(entity.getDatePaid());
         } else {
             resource.setDatePaid(null);
         }
 
-        resource.setPayday(entity.getPayday().toString());
+        resource.setPayday(entity.getPayday());
 
         return resource;
     }
@@ -45,9 +45,9 @@ public class PowerResourceAssembler extends GenericResourceAssembler<Power, Powe
         entity.setCounter(new BigDecimal(resource.getCounter()));
 
         if (resource.getDatePaid() != null) {
-            entity.setDatePaid(dateConverter.parseString(resource.getDatePaid()));
+            entity.setDatePaid(resource.getDatePaid());
         }
-        entity.setPayday(dateConverter.parseString(resource.getPayday()));
+        entity.setPayday(resource.getPayday());
         entity.setUser(user);
 
         return entity;
