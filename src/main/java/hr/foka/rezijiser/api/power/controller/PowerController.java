@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import hr.foka.rezijiser.api.common.resources.ResourcePage;
+import hr.foka.rezijiser.api.common.resources.ResourceRequest;
 import hr.foka.rezijiser.api.power.resources.PowerResource;
 import hr.foka.rezijiser.api.power.service.PowerService;
 import hr.foka.rezijiser.persistence.domain.User;
@@ -33,7 +33,7 @@ public class PowerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/paged")
-    public ResponseEntity<?> getPowerBills(@AuthenticationPrincipal User user, @RequestBody ResourcePage page){
+    public ResponseEntity<?> getPowerBills(@AuthenticationPrincipal User user, @RequestBody ResourceRequest page){
         LOGGER.debug("Received POST request to fetch paged power");
         return service.getResources(user, page);
     }

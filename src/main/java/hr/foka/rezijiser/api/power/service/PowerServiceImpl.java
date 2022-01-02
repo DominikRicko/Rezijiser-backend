@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import hr.foka.rezijiser.api.common.resources.ResourcePage;
+import hr.foka.rezijiser.api.common.resources.ResourceRequest;
 import hr.foka.rezijiser.api.power.resources.PowerResource;
 import hr.foka.rezijiser.api.power.resources.PowerResourceAssembler;
 import hr.foka.rezijiser.persistence.domain.Power;
@@ -36,7 +36,7 @@ public class PowerServiceImpl implements PowerService {
     }
 
     @Override
-    public ResponseEntity<?> getResources(User user, ResourcePage gridResource) {
+    public ResponseEntity<?> getResources(User user, ResourceRequest gridResource) {
         Pageable pageable;
         if(gridResource.getSortDirection() != null){
             pageable = PageRequest.of(gridResource.getPageNumber(), gridResource.getPageSize(), gridResource.getSortDirection(), gridResource.getSortBy().getColumnName());

@@ -6,12 +6,12 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import hr.foka.rezijiser.persistence.domain.Power;
+import hr.foka.rezijiser.persistence.domain.Notification;
 import hr.foka.rezijiser.persistence.domain.User;
 
 @Repository
-public interface PowerRepository extends PagingAndSortingRepository<Power, Integer>, QuerydslPredicateExecutor<Power> {
+public interface NotificationRepository extends PagingAndSortingRepository<Notification, Integer>, QuerydslPredicateExecutor<Notification>{
 
-    List<Power> findByUser(User user);
+    public List<Notification> findByUser(User user);
 
 }

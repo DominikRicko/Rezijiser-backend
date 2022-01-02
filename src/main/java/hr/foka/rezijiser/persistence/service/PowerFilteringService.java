@@ -8,7 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.common.converters.LocalDateConverter;
-import hr.foka.rezijiser.api.common.resources.ResourceFilter.TargetColumn;
+import hr.foka.rezijiser.api.common.resources.ResourceRequestFilter.TargetColumn;
 import hr.foka.rezijiser.persistence.domain.QPower;
 
 @Service

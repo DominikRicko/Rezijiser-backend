@@ -2,7 +2,7 @@ package hr.foka.rezijiser.api.common.resources;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ResourceFilter {
+public class ResourceRequestFilter {
     
     public static enum FilterOperation {
         LT, //Less than
@@ -66,7 +66,7 @@ public class ResourceFilter {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(ResourceFilter.class.getName());
+        StringBuilder builder = new StringBuilder(ResourceRequestFilter.class.getName());
         builder.append(" [");
         builder.append("op=").append(op);
         builder.append(",col=").append(col);

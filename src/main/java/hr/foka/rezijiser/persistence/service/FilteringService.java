@@ -6,9 +6,9 @@ import java.util.Collection;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import hr.foka.rezijiser.api.common.converters.LocalDateConverter;
-import hr.foka.rezijiser.api.common.resources.ResourceFilter;
-import hr.foka.rezijiser.api.common.resources.ResourceFilter.FilterOperation;
-import hr.foka.rezijiser.api.common.resources.ResourceFilter.TargetColumn;
+import hr.foka.rezijiser.api.common.resources.ResourceRequestFilter;
+import hr.foka.rezijiser.api.common.resources.ResourceRequestFilter.FilterOperation;
+import hr.foka.rezijiser.api.common.resources.ResourceRequestFilter.TargetColumn;
 import hr.foka.rezijiser.persistence.domain.QUser;
 import hr.foka.rezijiser.persistence.domain.User;
 
@@ -32,9 +32,9 @@ public abstract class FilteringService {
 
     public abstract BooleanExpression filterByDatePaidBetween(LocalDate gt, LocalDate lt);
 
-    public BooleanExpression processFilters(BooleanExpression startingFilter, Collection<ResourceFilter> filters) {
+    public BooleanExpression processFilters(BooleanExpression startingFilter, Collection<ResourceRequestFilter> filters) {
 
-        for (ResourceFilter filter : filters) {
+        for (ResourceRequestFilter filter : filters) {
 
             FilterOperation op = filter.getOp();
             TargetColumn col = filter.getCol();

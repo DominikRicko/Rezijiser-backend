@@ -1,4 +1,4 @@
-package hr.foka.rezijiser.api.common.resources;
+package hr.foka.rezijiser.api.notification.resource;
 
 import java.util.Collection;
 
@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.domain.Sort;
 
-import hr.foka.rezijiser.api.common.resources.ResourceFilter.TargetColumn;
+import hr.foka.rezijiser.api.notification.resource.NotificationRequestFilter.TargetColumn;
 
-public class ResourcePage {
-
+public class NotificationRequest {
+    
     @JsonProperty("pageNumber")
     private int pageNumber = 0;
 
@@ -17,13 +17,13 @@ public class ResourcePage {
     private int pageSize = 10;
 
     @JsonProperty("sortDirection")
-    private Sort.Direction sortDirection;
+    private Sort.Direction sortDirection = Sort.Direction.DESC;
 
     @JsonProperty("sortBy")
-    private TargetColumn sortBy = TargetColumn.PAYDAY;
+    private TargetColumn sortBy = TargetColumn.TIME_CREATED;
 
     @JsonProperty("filters")
-    private Collection<ResourceFilter> filters;
+    private Collection<NotificationRequestFilter> filters;
 
     public int getPageNumber() {
         return this.pageNumber;
@@ -57,24 +57,26 @@ public class ResourcePage {
         this.sortBy = sortBy;
     }
 
-    public Collection<ResourceFilter> getFilters() {
+
+    public Collection<NotificationRequestFilter> getFilters() {
         return this.filters;
     }
 
-    public void setFilters(Collection<ResourceFilter> filters) {
+    public void setFilters(Collection<NotificationRequestFilter> filters) {
         this.filters = filters;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(ResourcePage.class.getName());
+        StringBuilder builder = new StringBuilder(NotificationResource.class.getName());
         builder.append(" [");
         builder.append("pageNumber=").append(pageNumber);
         builder.append(", pageSize=").append(pageSize);
-        builder.append(", sortDirection=").append(sortDirection);
         builder.append(", sortBy=").append(sortBy);
+        builder.append(", sortDirection=").append(sortDirection);
         builder.append(", filters=").append(filters);
         builder.append("]");
         return builder.toString();
     }
+
 }

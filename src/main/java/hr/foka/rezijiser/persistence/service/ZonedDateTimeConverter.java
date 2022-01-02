@@ -4,12 +4,20 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
-import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter(autoApply = true)
-public class ZonedDateTimeConverter implements AttributeConverter<java.time.ZonedDateTime, java.sql.Timestamp> {
+public class ZonedDateTimeConverter implements 
+    javax.persistence.AttributeConverter<java.time.ZonedDateTime, java.sql.Timestamp>, 
+    org.springframework.core.convert.converter.Converter<String, ZonedDateTime> {
+
+    private final DateTimeFormatter formatter;
+
+    public ZonedDateTimeConverter(){
+        this.formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+    }
 
     @Override
     public java.sql.Timestamp convertToDatabaseColumn(ZonedDateTime entityValue) {
@@ -24,4 +32,8 @@ public class ZonedDateTimeConverter implements AttributeConverter<java.time.Zone
         return localDateTime.atZone(ZoneId.systemDefault());
     }
 
+    @Override
+    public ZonedDateTime convert(String source) {
+        return ZonedDateTime.from(formatter.parse(source));
+    }
 }
