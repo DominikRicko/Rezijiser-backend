@@ -8,7 +8,10 @@ import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Converter;
 
+import org.springframework.stereotype.Service;
+
 @Converter(autoApply = true)
+@Service
 public class ZonedDateTimeConverter implements 
     javax.persistence.AttributeConverter<java.time.ZonedDateTime, java.sql.Timestamp>, 
     org.springframework.core.convert.converter.Converter<String, ZonedDateTime> {

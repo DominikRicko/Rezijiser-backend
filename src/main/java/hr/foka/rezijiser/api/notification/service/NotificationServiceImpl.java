@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.notification.resource.NotificationRequest;
 import hr.foka.rezijiser.api.notification.resource.NotificationResource;
@@ -20,6 +21,7 @@ import hr.foka.rezijiser.persistence.domain.User;
 import hr.foka.rezijiser.persistence.repository.NotificationRepository;
 import hr.foka.rezijiser.persistence.service.NotificationFilteringService;
 
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationResourceAssembler assembler;

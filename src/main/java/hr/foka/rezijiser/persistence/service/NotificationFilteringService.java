@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import org.springframework.stereotype.Service;
+
 import hr.foka.rezijiser.api.notification.resource.NotificationRequestFilter;
 import hr.foka.rezijiser.api.notification.resource.NotificationRequestFilter.FilterOperation;
 import hr.foka.rezijiser.api.notification.resource.NotificationRequestFilter.TargetColumn;
@@ -12,6 +14,7 @@ import hr.foka.rezijiser.persistence.domain.QUser;
 import hr.foka.rezijiser.persistence.domain.User;
 import hr.foka.rezijiser.persistence.domain.Notification.Level;
 
+@Service
 public class NotificationFilteringService {
     
     protected ZonedDateTimeConverter dateParser;
