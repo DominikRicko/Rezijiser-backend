@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -32,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/e/**").authenticated();
 		http.authorizeRequests().anyRequest().authenticated();
 		http.httpBasic();
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(this.jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
