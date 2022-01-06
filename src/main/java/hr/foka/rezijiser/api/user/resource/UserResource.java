@@ -55,9 +55,9 @@ public class UserResource {
         StringBuilder builder = new StringBuilder(UserResource.class.getName());
         builder.append(" [");
         builder.append("email=").append(email);
-        builder.append(",name=").append(name);
-        builder.append(",surname=").append(surname);
-        builder.append(",timeCreated=").append(timeCreated);
+        builder.append(", name=").append(name);
+        builder.append(", surname=").append(surname);
+        builder.append(", timeCreated=").append(timeCreated);
         return builder.append("]").toString();
     }
 

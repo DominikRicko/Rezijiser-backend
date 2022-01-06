@@ -24,10 +24,10 @@ public class PowerResource extends CommonResource {
         StringBuilder builder = new StringBuilder(PowerResource.class.getName());
         builder.append(" [");
         builder.append("id=").append(id);
-        builder.append(",cost=").append(cost);
-        builder.append(",counter=").append(counter);
-        builder.append(",payday=").append(payday);
-        builder.append(",datePaid=").append(datePaid);
+        builder.append(", cost=").append(cost);
+        builder.append(", counter=").append(counter);
+        builder.append(", payday=").append(payday);
+        builder.append(", datePaid=").append(datePaid);
         builder.append("]");
         return builder.toString();
     }

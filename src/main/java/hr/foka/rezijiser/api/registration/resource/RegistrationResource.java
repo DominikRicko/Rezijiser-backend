@@ -55,8 +55,8 @@ public class RegistrationResource {
         StringBuilder builder = new StringBuilder(RegistrationResource.class.getName());
         builder.append(" [");
         builder.append("name=").append(name);
-        builder.append(",surname=").append(surname);
-        builder.append(",email=").append(email);
+        builder.append(", surname=").append(surname);
+        builder.append(", email=").append(email);
         builder.append("]");
         return builder.toString();
     }

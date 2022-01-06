@@ -69,8 +69,8 @@ public class ResourceRequestFilter {
         StringBuilder builder = new StringBuilder(ResourceRequestFilter.class.getName());
         builder.append(" [");
         builder.append("op=").append(op);
-        builder.append(",col=").append(col);
-        builder.append(",val=").append(val);
+        builder.append(", col=").append(col);
+        builder.append(", val=").append(val);
         builder.append("]");
         return builder.toString();
     }
