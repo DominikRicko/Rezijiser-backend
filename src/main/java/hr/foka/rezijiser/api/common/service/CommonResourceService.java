@@ -2,10 +2,11 @@ package hr.foka.rezijiser.api.common.service;
 
 import org.springframework.http.ResponseEntity;
 
+import hr.foka.rezijiser.api.common.resources.CommonResource;
 import hr.foka.rezijiser.api.common.resources.ResourceRequest;
 import hr.foka.rezijiser.persistence.domain.User;
 
-public interface CommonService<T> {
+public interface CommonResourceService<T extends CommonResource> {
 
     ResponseEntity<?> getResources(User user);
 
