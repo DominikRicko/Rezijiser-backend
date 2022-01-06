@@ -25,6 +25,11 @@ public final class BillFilteringServiceImpl implements BillFilteringService {
     }
 
     @Override
+    public BooleanExpression filterById(Integer id) {
+        return QBill.bill.id.eq(id);
+    }
+
+    @Override
     public BooleanExpression filterByCostBetween(String gt, String lt) {
         return QBill.bill.cost.between(new BigDecimal(gt), new BigDecimal(lt));
     }

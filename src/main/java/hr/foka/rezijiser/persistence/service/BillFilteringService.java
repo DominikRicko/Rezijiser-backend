@@ -10,6 +10,8 @@ import hr.foka.rezijiser.persistence.domain.Bill;
 
 public interface BillFilteringService {
  
+    BooleanExpression filterById(Integer id);
+
     BooleanExpression filterByCostBetween(String gt, String lt);
 
     BooleanExpression filterByPaydayBetween(LocalDate gt, LocalDate lt);

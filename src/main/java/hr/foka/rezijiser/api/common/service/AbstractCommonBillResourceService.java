@@ -37,7 +37,7 @@ public abstract class AbstractCommonBillResourceService<T extends CommonResource
 
     @Override
     public ResponseEntity<?> getResources(User user) {
-        return new ResponseEntity<>(assembler.toResources(repository.findByUser(user)), HttpStatus.OK);
+        return new ResponseEntity<>(assembler.toResources(repository.findAll(getBillFilter(user))), HttpStatus.OK);
     }
 
     @Override
@@ -49,8 +49,7 @@ public abstract class AbstractCommonBillResourceService<T extends CommonResource
             pageable = PageRequest.of(gridResource.getPageNumber(), gridResource.getPageSize());
         }
 
-        BooleanExpression filter = userFilteringService.filterForUser(user).and(billFilteringService.filterByBillType(getType()));
-        filter = billFilteringService.processFilters(filter, gridResource.getFilters());
+        BooleanExpression filter = billFilteringService.processFilters(getBillFilter(user), gridResource.getFilters());
 
         Page<Bill> page = repository.findAll(filter, pageable);
         Page<T> resource = page.map(it -> assembler.toResource(it));
@@ -69,7 +68,7 @@ public abstract class AbstractCommonBillResourceService<T extends CommonResource
 
         if (entity.getId() == null)
             return new ResponseEntity<>("Missing id, cannot update.", HttpStatus.BAD_REQUEST);
-        else if (!repository.existsById(entity.getId()))
+        else if (!repository.exists(getBillFilterWithId(user, entity.getId())))
             return new ResponseEntity<>("Entity with id " + entity.getId() + " does not exist in database.", HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(assembler.toResource(repository.save(entity)), HttpStatus.OK);
@@ -80,13 +79,21 @@ public abstract class AbstractCommonBillResourceService<T extends CommonResource
     public ResponseEntity<?> deleteResource(User user, Integer id) {
         if (id == null)
             return new ResponseEntity<>("Missing id, cannot delete.", HttpStatus.BAD_REQUEST);
-        else if (!repository.existsById(id))
+            else if (!repository.exists(getBillFilterWithId(user, id)))
             return new ResponseEntity<>("Entity with id " + id + " does not exist in database.", HttpStatus.NOT_FOUND);
         else {
             repository.deleteById(id);
             return new ResponseEntity<>("Deleted.", HttpStatus.OK);
         }
 
+    }
+
+    private BooleanExpression getBillFilter(User user){
+        return userFilteringService.filterForUser(user).and(billFilteringService.filterByBillType(getType()));
+    }
+
+    private BooleanExpression getBillFilterWithId(User user, Integer id){
+        return getBillFilter(user).and(billFilteringService.filterById(id));
     }
 
     protected abstract Bill.Type getType();
