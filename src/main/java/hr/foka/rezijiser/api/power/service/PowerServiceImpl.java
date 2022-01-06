@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.common.resources.ResourceRequest;
-import hr.foka.rezijiser.api.power.resources.PowerResource;
-import hr.foka.rezijiser.api.power.resources.PowerResourceAssembler;
+import hr.foka.rezijiser.api.power.resource.PowerResource;
+import hr.foka.rezijiser.api.power.resource.PowerResourceAssembler;
 import hr.foka.rezijiser.persistence.domain.Bill;
 import hr.foka.rezijiser.persistence.domain.User;
 import hr.foka.rezijiser.persistence.domain.Bill.Type;

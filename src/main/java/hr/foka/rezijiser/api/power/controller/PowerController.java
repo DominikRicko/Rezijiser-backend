@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import hr.foka.rezijiser.api.common.resources.ResourceRequest;
-import hr.foka.rezijiser.api.power.resources.PowerResource;
+import hr.foka.rezijiser.api.power.resource.PowerResource;
 import hr.foka.rezijiser.api.power.service.PowerService;
 import hr.foka.rezijiser.persistence.domain.User;
 
