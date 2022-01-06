@@ -16,7 +16,7 @@ public class ResourceRequestFilter {
         @JsonProperty("cost") COST("cost"),
         @JsonProperty("payday") PAYDAY("payday"),
         @JsonProperty("datePaid") DATEPAID("date_paid"),
-        @JsonProperty("counter") COUNTER("counter");
+        @JsonProperty("counter") SPENT("spent");
 
         TargetColumn(String columnName){
             this.columnName = columnName;

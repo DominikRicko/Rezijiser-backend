@@ -6,12 +6,12 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import hr.foka.rezijiser.persistence.domain.Power;
+import hr.foka.rezijiser.persistence.domain.Bill;
 import hr.foka.rezijiser.persistence.domain.User;
 
 @Repository
-public interface PowerRepository extends PagingAndSortingRepository<Power, Integer>, QuerydslPredicateExecutor<Power> {
+public interface BillRepository extends PagingAndSortingRepository<Bill, Integer>, QuerydslPredicateExecutor<Bill> {
 
-    List<Power> findByUser(User user);
+    List<Bill> findByUser(User user);
 
 }

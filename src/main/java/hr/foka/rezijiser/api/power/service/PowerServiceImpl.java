@@ -12,22 +12,30 @@ import org.springframework.stereotype.Service;
 import hr.foka.rezijiser.api.common.resources.ResourceRequest;
 import hr.foka.rezijiser.api.power.resources.PowerResource;
 import hr.foka.rezijiser.api.power.resources.PowerResourceAssembler;
-import hr.foka.rezijiser.persistence.domain.Power;
+import hr.foka.rezijiser.persistence.domain.Bill;
 import hr.foka.rezijiser.persistence.domain.User;
-import hr.foka.rezijiser.persistence.repository.PowerRepository;
-import hr.foka.rezijiser.persistence.service.PowerFilteringService;
+import hr.foka.rezijiser.persistence.domain.Bill.Type;
+import hr.foka.rezijiser.persistence.repository.BillRepository;
+import hr.foka.rezijiser.persistence.service.BillFilteringService;
+import hr.foka.rezijiser.persistence.service.UserFilteringService;
 
 @Service
 public class PowerServiceImpl implements PowerService {
 
     private final PowerResourceAssembler assembler;
-    private final PowerRepository repository;
-    private final PowerFilteringService filteringService;
+    private final BillRepository repository;
+    private final BillFilteringService billFilteringService;
+    private final UserFilteringService userFilteringService;
 
-    public PowerServiceImpl(PowerResourceAssembler assembler, PowerRepository repository, PowerFilteringService filteringService) {
+    public PowerServiceImpl(
+        PowerResourceAssembler assembler, 
+        BillRepository repository, 
+        BillFilteringService filteringService,
+        UserFilteringService userFilteringService) {
         this.assembler = assembler;
         this.repository = repository;
-        this.filteringService = filteringService;
+        this.billFilteringService = filteringService;
+        this.userFilteringService = userFilteringService;
     }
 
     @Override
@@ -44,22 +52,23 @@ public class PowerServiceImpl implements PowerService {
             pageable = PageRequest.of(gridResource.getPageNumber(), gridResource.getPageSize());
         }
 
-        BooleanExpression filter = filteringService.processFilters(filteringService.filterForUser(user), gridResource.getFilters());
+        BooleanExpression filter = userFilteringService.filterForUser(user).and(billFilteringService.filterByBillType(Type.POWER));
+        filter = billFilteringService.processFilters(filter, gridResource.getFilters());
 
-        Page<Power> page = repository.findAll(filter, pageable);
+        Page<Bill> page = repository.findAll(filter, pageable);
         Page<PowerResource> resource = page.map(it -> assembler.toResource(it));
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<?> saveResource(User user, PowerResource resource) {
-        Power power = assembler.toEntity(user, resource);
+        Bill power = assembler.toEntity(user, resource);
         return new ResponseEntity<>(assembler.toResource(repository.save(power)), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<?> updateResource(User user, PowerResource resource) {
-        Power power = assembler.toEntity(user, resource);
+        Bill power = assembler.toEntity(user, resource);
 
         if (power.getId() == null)
             return new ResponseEntity<>("Missing id, cannot update.", HttpStatus.BAD_REQUEST);

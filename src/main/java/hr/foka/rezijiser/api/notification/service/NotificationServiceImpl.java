@@ -20,21 +20,25 @@ import hr.foka.rezijiser.persistence.domain.Notification;
 import hr.foka.rezijiser.persistence.domain.User;
 import hr.foka.rezijiser.persistence.repository.NotificationRepository;
 import hr.foka.rezijiser.persistence.service.NotificationFilteringService;
+import hr.foka.rezijiser.persistence.service.UserFilteringService;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationResourceAssembler assembler;
     private final NotificationRepository repository;
-    private final NotificationFilteringService filteringService;
+    private final NotificationFilteringService notificationFilteringService;
+    private final UserFilteringService userFilteringService;
 
     public NotificationServiceImpl(
         NotificationResourceAssembler assembler, 
         NotificationRepository repository,
-        NotificationFilteringService filteringService) {
+        NotificationFilteringService notificationFilteringService,
+        UserFilteringService userFilteringService) {
         this.assembler = assembler;
         this.repository = repository;
-        this.filteringService = filteringService;
+        this.notificationFilteringService = notificationFilteringService;
+        this.userFilteringService = userFilteringService;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class NotificationServiceImpl implements NotificationService {
             pageable = PageRequest.of(request.getPageNumber(), request.getPageSize());
         }
 
-        BooleanExpression filter = filteringService.processFilters(filteringService.filterForUser(user), request.getFilters());
+        BooleanExpression filter = notificationFilteringService.processFilters(userFilteringService.filterForUser(user), request.getFilters());
 
         Page<Notification> page = repository.findAll(filter, pageable);
         Page<NotificationResource> resource = page.map(it -> assembler.toResource(it));

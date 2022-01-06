@@ -1,37 +1,60 @@
 package hr.foka.rezijiser.persistence.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import org.springframework.stereotype.Service;
+
 import hr.foka.rezijiser.api.common.converters.LocalDateConverter;
 import hr.foka.rezijiser.api.common.resources.ResourceRequestFilter;
 import hr.foka.rezijiser.api.common.resources.ResourceRequestFilter.FilterOperation;
 import hr.foka.rezijiser.api.common.resources.ResourceRequestFilter.TargetColumn;
-import hr.foka.rezijiser.persistence.domain.QUser;
-import hr.foka.rezijiser.persistence.domain.User;
+import hr.foka.rezijiser.persistence.domain.Bill.Type;
+import hr.foka.rezijiser.persistence.domain.QBill;
 
-public abstract class FilteringService {
+@Service
+public final class BillFilteringServiceImpl implements BillFilteringService {
 
-    protected LocalDateConverter dateParser;
+    private LocalDateConverter dateParser;
 
-    public FilteringService(LocalDateConverter dateParser){
+    public BillFilteringServiceImpl(LocalDateConverter dateParser){
         this.dateParser = dateParser;
     }
 
-    public BooleanExpression filterForUser(User user) {
-        return QUser.user.eq(user);
+    @Override
+    public BooleanExpression filterByCostBetween(String gt, String lt) {
+        return QBill.bill.cost.between(new BigDecimal(gt), new BigDecimal(lt));
     }
 
-    public abstract BooleanExpression filterByCostBetween(String gt, String lt);
+    @Override
+    public BooleanExpression filterByPaydayBetween(LocalDate gt, LocalDate lt) {
+        return QBill.bill.payday.between(gt, lt);
+    }
 
-    public abstract BooleanExpression filterByPaydayBetween(LocalDate gt, LocalDate lt);
+    @Override
+    public BooleanExpression filterByIsPaid() {
+        return QBill.bill.datePaid.isNotNull();
+    }
 
-    public abstract BooleanExpression filterByIsPaid();
+    @Override
+    public BooleanExpression filterByDatePaidBetween(LocalDate gt, LocalDate lt) {
+        return QBill.bill.datePaid.between(gt, lt);
+    }
 
-    public abstract BooleanExpression filterByDatePaidBetween(LocalDate gt, LocalDate lt);
+    @Override
+    public BooleanExpression filterBySpentBetween(String gt, String lt){
+        return QBill.bill.spent.between(new BigDecimal(gt), new BigDecimal(lt));
+    }
 
+    @Override
+    public BooleanExpression filterByBillType(Type type) {
+        return QBill.bill.type.eq(type);
+    }
+
+    @Override
     public BooleanExpression processFilters(BooleanExpression startingFilter, Collection<ResourceRequestFilter> filters) {
 
         for (ResourceRequestFilter filter : filters) {
@@ -77,7 +100,7 @@ public abstract class FilteringService {
         return filter;
     }
 
-    protected BooleanExpression processEqualsFilter(TargetColumn column, String value) {
+    private BooleanExpression processEqualsFilter(TargetColumn column, String value) {
         switch (column) {
             case PAYDAY:
                 return filterByPaydayBetween(dateParser.convert(value), dateParser.convert(value));
@@ -85,12 +108,14 @@ public abstract class FilteringService {
                 return filterByCostBetween(value, value);
             case DATEPAID: 
                 return filterByDatePaidBetween(dateParser.convert(value), dateParser.convert(value));
+            case SPENT:
+                return filterBySpentBetween(value, value);
             default: 
                 throw new IllegalArgumentException("Unknown column " + column);
         }
     }
 
-    protected BooleanExpression processLessThanFilter(TargetColumn column, String value) {
+    private BooleanExpression processLessThanFilter(TargetColumn column, String value) {
         switch (column) {
             case PAYDAY:
                 return filterByPaydayBetween(LocalDate.MIN, dateParser.convert(value));
@@ -98,12 +123,14 @@ public abstract class FilteringService {
                 return filterByCostBetween(Integer.valueOf(Integer.MIN_VALUE).toString(), value);
             case DATEPAID: 
                 return filterByDatePaidBetween(LocalDate.MIN, dateParser.convert(value));
+            case SPENT:
+                return filterBySpentBetween(Integer.valueOf(Integer.MIN_VALUE).toString(), value);
             default: 
                 throw new IllegalArgumentException("Unknown column " + column);
         }
     }
 
-    protected BooleanExpression processGreaterThanFilter(TargetColumn column, String value) {
+    private BooleanExpression processGreaterThanFilter(TargetColumn column, String value) {
         switch (column) {
             case PAYDAY:
                 return filterByPaydayBetween(dateParser.convert(value), LocalDate.MAX);
@@ -111,6 +138,8 @@ public abstract class FilteringService {
                 return filterByCostBetween(value, Integer.valueOf(Integer.MAX_VALUE).toString());
             case DATEPAID: 
                 return filterByDatePaidBetween(dateParser.convert(value), LocalDate.MAX);
+            case SPENT:
+                return filterBySpentBetween(value, Integer.valueOf(Integer.MAX_VALUE).toString());
             default: 
                 throw new IllegalArgumentException("Unknown column " + column);
         }
