@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
 
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
@@ -15,14 +13,15 @@ import org.slf4j.LoggerFactory;
 import hr.foka.rezijiser.services.export.interfaces.ExcelExporter;
 import hr.foka.rezijiser.services.export.interfaces.FileExporter;
 import hr.foka.rezijiser.services.export.interfaces.StreamExporter;
+import hr.foka.rezijiser.services.export.resource.ExportResource;
 
 public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, FileExporter<T>, StreamExporter<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractExcelExporter.class);
     
     @Override
-    public Boolean exportToFile(String filepath, Collection<T> objects) {
-        LOGGER.info("Attempting to export {} objects into Excel file {}.", objects.size(), filepath);
+    public Boolean exportToFile(String filepath, ExportResource<T> objects) {
+        LOGGER.info("Attempting to export {} objects into Excel file {}.", objects.getData().size(), filepath);
         File file = new File(filepath);
         Boolean result = _exportToFile(file, objects);
         if(result) LOGGER.info("Objects exported into Excel file.");
@@ -30,38 +29,30 @@ public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, File
     }
 
     @Override
-    public Boolean exportToFile(File file, Collection<T> objects) {
-        LOGGER.info("Attempting to export {} objects into Excel file {}.", objects.size(), file.getName());
+    public Boolean exportToFile(File file, ExportResource<T> objects) {
+        LOGGER.info("Attempting to export {} objects into Excel file {}.", objects.getData().size(), file.getName());
         Boolean result = _exportToFile(file, objects);
         if(result) LOGGER.info("Objects exported into Excel file.");
         return result;
     }
 
     @Override
-    public Boolean exportToOutputStream(OutputStream stream, Collection<T> objects) {
-        LOGGER.info("Attempting to export {} objects into output stream.", objects.size());
+    public Boolean exportToOutputStream(OutputStream stream, ExportResource<T> objects) {
+        LOGGER.info("Attempting to export {} objects into output stream.", objects.getData().size());
         Boolean result = _exportToOutputStream(stream, objects);
         if(result) LOGGER.info("Objects exported into output stream.");
         return result;
     }
 
     @Override
-    public Boolean exportToWorkbook(Workbook workbook, Collection<T> objects) {
-        LOGGER.info("Attempting to export {} objects into Excel Workbook.", objects.size());
+    public Boolean exportToWorkbook(Workbook workbook, ExportResource<T> objects) {
+        LOGGER.info("Attempting to export {} objects into Excel Workbook.", objects.getData().size());
         Boolean result = _exportToWorkbook(workbook, objects);
         if(result) LOGGER.info("Objects exported into Excel workbook.");
         return result;
     }
 
-    @Override
-    public Boolean exportToSheet(Sheet sheet, Collection<T> objects) {
-        LOGGER.info("Attempting to export {} objects into Excel sheet.", objects.size());
-        Boolean result = _exportToSheet(sheet, objects);
-        if(result) LOGGER.info("Objects exported into Excel sheet.");
-        return result;
-    }
-
-    protected Boolean _exportToFile(File file, Collection<T> objects){
+    protected Boolean _exportToFile(File file, ExportResource<T> objects){
         try(OutputStream stream = new FileOutputStream(file)){
             return _exportToOutputStream(stream, objects);
         } catch(IOException e){
@@ -70,7 +61,7 @@ public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, File
         }
     }
 
-    protected Boolean _exportToOutputStream(OutputStream stream, Collection<T> objects){
+    protected Boolean _exportToOutputStream(OutputStream stream, ExportResource<T> objects){
         try(Workbook workbook = WorkbookFactory.create(true)){
             Boolean result = _exportToWorkbook(workbook, objects);
             workbook.write(stream);
@@ -81,14 +72,10 @@ public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, File
         }
     }
 
-    protected Boolean _exportToWorkbook(Workbook workbook, Collection<T> objects){
-       return _exportToSheet(workbook.createSheet(), objects);
+    protected Boolean _exportToWorkbook(Workbook workbook, ExportResource<T> objects){
+       return export(workbook, objects);
     }
 
-    protected Boolean _exportToSheet(Sheet sheet, Collection<T> objects){
-        return _export(sheet, objects);
-    }
-
-    protected abstract Boolean _export(Sheet sheet, Collection<T> objects);
+    protected abstract Boolean export(Workbook workbook, ExportResource<T> objects);
 
 }

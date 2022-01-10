@@ -1,10 +1,11 @@
 package hr.foka.rezijiser.services.export.interfaces;
 
 import java.io.OutputStream;
-import java.util.Collection;
+
+import hr.foka.rezijiser.services.export.resource.ExportResource;
 
 public interface StreamExporter<T> {
     
-    Boolean exportToOutputStream(OutputStream stream, Collection<T> objects);
+    Boolean exportToOutputStream(OutputStream stream, ExportResource<T> objects);
 
 }
