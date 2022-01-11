@@ -1,7 +1,5 @@
 package hr.foka.rezijiser.api.export.resource;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ExportRequestResource {
@@ -11,27 +9,27 @@ public class ExportRequestResource {
     }
 
     @JsonProperty("startingDate")
-    private LocalDate startingDate;
+    private String startingDate;
 
     @JsonProperty("endingDate")
-    private LocalDate endingDate;
+    private String endingDate;
 
     @JsonProperty("exportType")
     private ExportType exportType;
 
-    public LocalDate getStartingDate() {
+    public String getStartingDate() {
         return this.startingDate;
     }
 
-    public void setStartingDate(LocalDate startingDate) {
+    public void setStartingDate(String startingDate) {
         this.startingDate = startingDate;
     }
 
-    public LocalDate getEndingDate() {
+    public String getEndingDate() {
         return this.endingDate;
     }
 
-    public void setEndingDate(LocalDate endingDate) {
+    public void setEndingDate(String endingDate) {
         this.endingDate = endingDate;
     }
 

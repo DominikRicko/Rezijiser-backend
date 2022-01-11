@@ -2,6 +2,8 @@ package hr.foka.rezijiser.api.export.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,10 +29,10 @@ public class ExportController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public byte[] requestExport(@AuthenticationPrincipal User user, @RequestBody ExportRequestResource request)
+    public byte[] requestExport(@AuthenticationPrincipal User user, @RequestBody ExportRequestResource request, HttpServletResponse response)
             throws IOException {
         LOGGER.info("Received request to export data.");
-        byte[] data = service.requestExport(user, request);
+        byte[] data = service.requestExport(user, request, response);
         LOGGER.info("Export successful");
         return data;
 

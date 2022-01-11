@@ -1,6 +1,7 @@
 package hr.foka.rezijiser.services.export.resource;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 //generic class for passing data and information to whatever exporter implementation.
@@ -8,7 +9,7 @@ import java.util.Map;
 public class ExportResource<T> {
 
     private Collection<T> data;
-    private Map<String, Object> metadata;
+    private Map<String, Object> metadata = new HashMap<>();
 
     public Collection<T> getData() {
         return this.data;

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,22 +82,28 @@ public class ExcelBillExporter extends AbstractExcelExporter<Bill> {
 
         for (Bill bill : bills) {
             Row dataRow = sheet.createRow(++rowCounter);
-            dataRow.createCell(0).setCellValue(bill.getPayday());
+            dataRow.createCell(0).setCellValue(bill.getPayday().toString());
             if (bill.getDatePaid() != null)
-                dataRow.createCell(1).setCellValue(bill.getDatePaid());
+                dataRow.createCell(1).setCellValue(bill.getDatePaid().toString());
             else
                 dataRow.createCell(1).setCellValue("NEPLAĆENO");
             dataRow.createCell(2).setCellValue(bill.getCost().toString());
-            dataRow.createCell(3).setCellValue(bill.getSpent().toString());
+            
+            if(bill.getSpent() != null)
+                dataRow.createCell(3).setCellValue(bill.getSpent().toString());
+        }
+
+        for(int i = 0; i < 4; i++){
+            sheet.autoSizeColumn(i);
         }
 
     }
 
     private void exportReportToSheet(Sheet sheet, ExportResource<Bill> bills) {
 
-        List<BigDecimal> minimal = new ArrayList<>();
-        List<BigDecimal> maximal = new ArrayList<>();
-        List<BigDecimal> total = new ArrayList<>();
+        List<BigDecimal> minimal = new ArrayList<>(8);
+        List<BigDecimal> maximal = new ArrayList<>(8);
+        List<BigDecimal> total = new ArrayList<>(8);
 
         findStats(bills.getData(), total, minimal, maximal);
 
@@ -108,7 +115,7 @@ public class ExcelBillExporter extends AbstractExcelExporter<Bill> {
 
         sheet.addMergedRegion(CellRangeAddress.valueOf("A1:H1"));
 
-        row.createCell(0).setCellValue(String.format("Izvještaj o režijama u vrmeenskom periodu od {} do {}",
+        row.createCell(0).setCellValue(String.format("Izvještaj o režijama u vremenskom periodu od %s do %s",
                 startingDate.toString(), endingDate.toString()));
 
         row = sheet.createRow(2);
@@ -124,24 +131,31 @@ public class ExcelBillExporter extends AbstractExcelExporter<Bill> {
         row = sheet.createRow(3);
         row.createCell(0).setCellValue("Ukupna potrošnja");
         for(int i = 0; i < 8; i++){
-            row.createCell(i + 1).setCellValue(total.get(i).toString());
+            if(total.get(i) != null)
+                row.createCell(i + 1).setCellValue(total.get(i).toString());
         }
 
         row = sheet.createRow(4);
         row.createCell(0).setCellValue("Najveći iznos");
         for(int i = 0; i < 8; i++){
-            row.createCell(i + 1).setCellValue(maximal.get(i).toString());
+            if(maximal.get(i) != null)
+                row.createCell(i + 1).setCellValue(maximal.get(i).toString());
         }
 
         row = sheet.createRow(5);
         row.createCell(0).setCellValue("Najmanji iznos");
         for(int i = 0; i < 8; i++){
-            row.createCell(i + 1).setCellValue(minimal.get(i).toString());
+            if(minimal.get(i) != null)
+                row.createCell(i + 1).setCellValue(minimal.get(i).toString());
         }
 
         row = sheet.createRow(6);
         row.createCell(0).setCellValue("Ukupno");
         row.createCell(1).setCellValue(getTotalInCollection(total).toString());
+
+        for(int i = 0; i < 9; i++){
+            sheet.autoSizeColumn(i);
+        }
 
     }
 
@@ -152,16 +166,43 @@ public class ExcelBillExporter extends AbstractExcelExporter<Bill> {
     private void findStats(Collection<Bill> bills, List<BigDecimal> total, List<BigDecimal> minimal,
             List<BigDecimal> maximal) {
 
-        for (int i = 0; i < 8; i++) {
-            total.set(i, new BigDecimal("0.00"));
-            minimal.set(i, new BigDecimal("0.00"));
-            maximal.set(i, new BigDecimal("0.00"));
+        HashMap<Bill.Type, BigDecimal> minimalMap = new HashMap<>();
+        HashMap<Bill.Type, BigDecimal> maximalMap = new HashMap<>();
+        HashMap<Bill.Type, BigDecimal> sumMap = new HashMap<>();
+
+        for (Bill.Type type : Bill.Type.values()) {
+            sumMap.put(type, BigDecimal.ZERO);
+            minimal.add(null);
+            maximal.add(null);
+            total.add(null);
         }
 
         for (Bill bill : bills) {
 
+            if(minimalMap.get(bill.getType()) != null){
+                if (minimalMap.get(bill.getType()).compareTo(bill.getCost()) > 0){
+                    minimalMap.put(bill.getType(), bill.getCost());
+                }
+            } else {
+                minimalMap.put(bill.getType(), bill.getCost());
+            }
+            
+            if(maximalMap.get(bill.getType()) != null){
+                if (maximalMap.get(bill.getType()).compareTo(bill.getCost()) < 0){
+                    maximalMap.put(bill.getType(), bill.getCost());
+                }
+            } else {
+                maximalMap.put(bill.getType(), bill.getCost());
+            }
+
+            sumMap.put(bill.getType(), sumMap.get(bill.getType()).add(bill.getCost()));
+            
+        }
+
+        for(Bill.Type type : Bill.Type.values()){
+
             int switchIndex = -1;
-            switch (bill.getType()) {
+            switch (type) {
                 case POWER: switchIndex = 0; break;
                 case WATER: switchIndex = 1; break;
                 case GAS: switchIndex = 2; break;
@@ -172,17 +213,11 @@ public class ExcelBillExporter extends AbstractExcelExporter<Bill> {
                 case TELECOMMUNICATION: switchIndex = 7; break;
                 default: continue;
             }
+        
+            maximal.set(switchIndex, maximalMap.get(type));
+            minimal.set(switchIndex, minimalMap.get(type));
+            total.set(switchIndex, sumMap.get(type));
 
-            total.get(switchIndex).add(bill.getCost());
-
-            if(minimal.get(switchIndex).compareTo(bill.getCost()) > 0){
-                minimal.set(switchIndex, bill.getCost());
-            }
-
-            if(maximal.get(switchIndex).compareTo(bill.getCost()) < 0){
-                maximal.set(switchIndex, bill.getCost());
-            }
-            
         }
 
     }

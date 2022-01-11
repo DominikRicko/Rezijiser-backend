@@ -8,11 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+import hr.foka.rezijiser.api.common.converters.LocalDateConverter;
 import hr.foka.rezijiser.api.export.resource.ExportRequestResource;
 import hr.foka.rezijiser.persistence.domain.Bill;
 import hr.foka.rezijiser.persistence.domain.User;
@@ -22,6 +26,7 @@ import hr.foka.rezijiser.persistence.service.UserFilteringService;
 import hr.foka.rezijiser.services.export.excel.ExcelBillExporter;
 import hr.foka.rezijiser.services.export.resource.ExportResource;
 
+@Service
 public class ExportServiceImpl implements ExportService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExportServiceImpl.class);
@@ -30,30 +35,35 @@ public class ExportServiceImpl implements ExportService {
     private BillFilteringService filterService;
     private BillRepository repository;
     private UserFilteringService userFilterService;
+    private LocalDateConverter dateParser;
 
     public ExportServiceImpl(
         ExcelBillExporter exporter,
         BillFilteringService filterService,
         BillRepository repository,
-        UserFilteringService userFilterService
+        UserFilteringService userFilterService,
+        LocalDateConverter dateParser
     ){
         this.exporter = exporter;
         this.filterService = filterService;
         this.repository = repository;
         this.userFilterService = userFilterService;
+        this.dateParser = dateParser;
     }
 
     @Override
-    public byte[] requestExport(User user, ExportRequestResource request) throws IOException {
+    public byte[] requestExport(User user, ExportRequestResource request, HttpServletResponse response) throws IOException {
         LOGGER.info("Exporting bills from {} to {}", request.getStartingDate(), request.getEndingDate());
 
         BooleanExpression filter = userFilterService.filterForUser(user);
-        filter = filter.and(filterService.filterByPaydayBetween(request.getStartingDate(), request.getEndingDate()));
+        filter = filter.and(filterService.filterByPaydayBetween(dateParser.convert(request.getStartingDate()), dateParser.convert(request.getEndingDate())));
 
         ExportResource<Bill> exportResource = toExportResource(request);
         exportResource.setData(toCollection(repository.findAll(filter)));
 
         byte[] excelData;
+
+        response.setContentType("application/xlsx");
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()){
             exporter.exportToOutputStream(stream, exportResource);
@@ -84,8 +94,9 @@ public class ExportServiceImpl implements ExportService {
         ExportResource<Bill> export = new ExportResource<>(); 
 
         Map<String, Object> metadata = new HashMap<>();
-        metadata.put(ExcelBillExporter.KEY_STARTING_DATE, resource.getStartingDate());
-        metadata.put(ExcelBillExporter.KEY_ENDING_DATE, resource.getEndingDate());
+        metadata.put(ExcelBillExporter.KEY_STARTING_DATE, dateParser.convert(resource.getStartingDate()));
+        metadata.put(ExcelBillExporter.KEY_ENDING_DATE, dateParser.convert(resource.getEndingDate()));
+        export.setMetadata(metadata);
 
         return export;
 
