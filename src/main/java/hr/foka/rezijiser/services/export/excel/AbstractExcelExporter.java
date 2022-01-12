@@ -10,12 +10,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hr.foka.rezijiser.services.export.interfaces.ExcelExporter;
-import hr.foka.rezijiser.services.export.interfaces.FileExporter;
-import hr.foka.rezijiser.services.export.interfaces.StreamExporter;
 import hr.foka.rezijiser.services.export.resource.ExportResource;
 
-public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, FileExporter<T>, StreamExporter<T> {
+public abstract class AbstractExcelExporter<T> implements ExcelExporter<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractExcelExporter.class);
     
@@ -24,7 +21,7 @@ public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, File
         LOGGER.info("Attempting to export {} objects into Excel file {}.", objects.getData().size(), filepath);
         File file = new File(filepath);
         Boolean result = _exportToFile(file, objects);
-        if(result) LOGGER.info("Objects exported into Excel file.");
+        if(result) LOGGER.info("Objects successfully exported into Excel file.");
         return result;
     }
 
@@ -32,7 +29,7 @@ public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, File
     public Boolean exportToFile(File file, ExportResource<T> objects) {
         LOGGER.info("Attempting to export {} objects into Excel file {}.", objects.getData().size(), file.getName());
         Boolean result = _exportToFile(file, objects);
-        if(result) LOGGER.info("Objects exported into Excel file.");
+        if(result) LOGGER.info("Objects successfully exported into Excel file.");
         return result;
     }
 
@@ -40,7 +37,7 @@ public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, File
     public Boolean exportToOutputStream(OutputStream stream, ExportResource<T> objects) {
         LOGGER.info("Attempting to export {} objects into output stream.", objects.getData().size());
         Boolean result = _exportToOutputStream(stream, objects);
-        if(result) LOGGER.info("Objects exported into output stream.");
+        if(result) LOGGER.info("Objects successfully exported into output stream.");
         return result;
     }
 
@@ -48,7 +45,7 @@ public abstract class AbstractExcelExporter<T> implements ExcelExporter<T>, File
     public Boolean exportToWorkbook(Workbook workbook, ExportResource<T> objects) {
         LOGGER.info("Attempting to export {} objects into Excel Workbook.", objects.getData().size());
         Boolean result = _exportToWorkbook(workbook, objects);
-        if(result) LOGGER.info("Objects exported into Excel workbook.");
+        if(result) LOGGER.info("Objects successfully exported into Excel workbook.");
         return result;
     }
 

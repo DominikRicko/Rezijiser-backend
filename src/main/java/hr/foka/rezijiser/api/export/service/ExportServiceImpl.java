@@ -24,6 +24,9 @@ import hr.foka.rezijiser.persistence.repository.BillRepository;
 import hr.foka.rezijiser.persistence.service.BillFilteringService;
 import hr.foka.rezijiser.persistence.service.UserFilteringService;
 import hr.foka.rezijiser.services.export.excel.ExcelBillExporter;
+import hr.foka.rezijiser.services.export.excel.ExcelExporter;
+import hr.foka.rezijiser.services.export.pdf.PdfBillExporter;
+import hr.foka.rezijiser.services.export.pdf.PdfExporter;
 import hr.foka.rezijiser.services.export.resource.ExportResource;
 
 @Service
@@ -31,20 +34,23 @@ public class ExportServiceImpl implements ExportService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExportServiceImpl.class);
 
-    private ExcelBillExporter exporter;
+    private ExcelExporter<Bill> excelExporter;
+    private PdfExporter<Bill> pdfExporter;
     private BillFilteringService filterService;
     private BillRepository repository;
     private UserFilteringService userFilterService;
     private LocalDateConverter dateParser;
 
     public ExportServiceImpl(
-        ExcelBillExporter exporter,
+        ExcelExporter<Bill> excelExporter,
+        PdfExporter<Bill> pdfExporter,
         BillFilteringService filterService,
         BillRepository repository,
         UserFilteringService userFilterService,
         LocalDateConverter dateParser
     ){
-        this.exporter = exporter;
+        this.excelExporter = excelExporter;
+        this.pdfExporter = pdfExporter;
         this.filterService = filterService;
         this.repository = repository;
         this.userFilterService = userFilterService;
@@ -58,22 +64,33 @@ public class ExportServiceImpl implements ExportService {
         BooleanExpression filter = userFilterService.filterForUser(user);
         filter = filter.and(filterService.filterByPaydayBetween(dateParser.convert(request.getStartingDate()), dateParser.convert(request.getEndingDate())));
 
-        ExportResource<Bill> exportResource = toExportResource(request);
-        exportResource.setData(toCollection(repository.findAll(filter)));
-
-        byte[] excelData;
+        ExportResource<Bill> exportResource = null;
+        byte[] exportData;
 
         response.setContentType("application/xlsx");
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()){
-            exporter.exportToOutputStream(stream, exportResource);
-            excelData = stream.toByteArray();
+
+            switch(request.getExportType()){
+                case EXCEL:
+                    exportResource = toExcelExportResource(request);
+                    exportResource.setData(toCollection(repository.findAll(filter)));
+                    excelExporter.exportToOutputStream(stream, exportResource);
+                    break;
+                case PDF:
+                    exportResource = toPdfExportResource(request);
+                    exportResource.setData(toCollection(repository.findAll(filter)));
+                    pdfExporter.exportToOutputStream(stream, exportResource);
+                    break;
+            }
+            
+            exportData = stream.toByteArray();
         } catch(IOException e){
             LOGGER.error("Could not export bills.", e);
             throw e;
         }
 
-        return excelData;
+        return exportData;
 
     }
 
@@ -89,13 +106,26 @@ public class ExportServiceImpl implements ExportService {
 
     }
     
-    private ExportResource<Bill> toExportResource(ExportRequestResource resource){
+    private ExportResource<Bill> toExcelExportResource(ExportRequestResource resource){
 
         ExportResource<Bill> export = new ExportResource<>(); 
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(ExcelBillExporter.KEY_STARTING_DATE, dateParser.convert(resource.getStartingDate()));
         metadata.put(ExcelBillExporter.KEY_ENDING_DATE, dateParser.convert(resource.getEndingDate()));
+        export.setMetadata(metadata);
+
+        return export;
+
+    }
+
+    private ExportResource<Bill> toPdfExportResource(ExportRequestResource resource){
+
+        ExportResource<Bill> export = new ExportResource<>(); 
+
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put(PdfBillExporter.KEY_STARTING_DATE, dateParser.convert(resource.getStartingDate()));
+        metadata.put(PdfBillExporter.KEY_ENDING_DATE, dateParser.convert(resource.getEndingDate()));
         export.setMetadata(metadata);
 
         return export;

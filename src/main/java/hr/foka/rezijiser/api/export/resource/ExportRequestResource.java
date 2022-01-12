@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ExportRequestResource {
     
     public static enum ExportType{
-        @JsonProperty("excel") EXCEL
+        @JsonProperty("excel") EXCEL,
+        @JsonProperty("pdf") PDF
     }
 
     @JsonProperty("startingDate")
