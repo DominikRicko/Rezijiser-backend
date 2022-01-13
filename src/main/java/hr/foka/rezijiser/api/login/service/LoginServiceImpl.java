@@ -41,11 +41,11 @@ public class LoginServiceImpl implements LoginService {
             Authentication authenticate = authenticationManager.authenticate(authToken);
             UserDetails user = userDetailsService.loadUserByUsername((String) authenticate.getPrincipal());
 
+            String jwtToken = jwtTokenUtil.generateToken(user); 
+
             return ResponseEntity.ok()
-                    .header(
-                            HttpHeaders.AUTHORIZATION,
-                            jwtTokenUtil.generateToken(user))
-                    .build();
+                    .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                        .body(jwtToken);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
