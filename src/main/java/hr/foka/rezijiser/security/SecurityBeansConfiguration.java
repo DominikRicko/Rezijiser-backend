@@ -23,7 +23,7 @@ public class SecurityBeansConfiguration {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration cors = new CorsConfiguration();
 		cors.setAllowCredentials(true);
-		cors.setAllowedOrigins(List.of("*"));
+		cors.setAllowedOriginPatterns(List.of("*"));
 		cors.setAllowedHeaders(List.of("*"));
 		cors.setAllowedMethods(List.of("*"));
 		source.registerCorsConfiguration("/**", cors);
