@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.login.resource.LoginResource;
+import hr.foka.rezijiser.api.login.resource.LoginResponseResource;
 import hr.foka.rezijiser.security.service.JwtTokenUtil;
 
 @Service
@@ -42,10 +43,12 @@ public class LoginServiceImpl implements LoginService {
             UserDetails user = userDetailsService.loadUserByUsername((String) authenticate.getPrincipal());
 
             String jwtToken = jwtTokenUtil.generateToken(user); 
+            LoginResponseResource response = new LoginResponseResource();
+            response.setToken(jwtToken);
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwtToken)
-                        .body(jwtToken);
+                    .body(response);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
