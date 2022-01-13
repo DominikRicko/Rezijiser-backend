@@ -8,12 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import hr.foka.rezijiser.api.common.converters.LocalDateConverter;
@@ -58,7 +59,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     @Override
-    public byte[] requestExport(User user, ExportRequestResource request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> requestExport(User user, ExportRequestResource request) throws IOException {
         LOGGER.info("Exporting bills from {} to {}", request.getStartingDate(), request.getEndingDate());
 
         BooleanExpression filter = userFilterService.filterForUser(user);
@@ -66,8 +67,7 @@ public class ExportServiceImpl implements ExportService {
 
         ExportResource<Bill> exportResource = null;
         byte[] exportData;
-
-        response.setContentType("application/xlsx");
+        HttpHeaders headers = new HttpHeaders();
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()){
 
@@ -76,11 +76,13 @@ public class ExportServiceImpl implements ExportService {
                     exportResource = toExcelExportResource(request);
                     exportResource.setData(toCollection(repository.findAll(filter)));
                     excelExporter.exportToOutputStream(stream, exportResource);
+                    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.xlsx");
                     break;
                 case PDF:
                     exportResource = toPdfExportResource(request);
                     exportResource.setData(toCollection(repository.findAll(filter)));
                     pdfExporter.exportToOutputStream(stream, exportResource);
+                    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.pdf");
                     break;
             }
             
@@ -90,7 +92,12 @@ public class ExportServiceImpl implements ExportService {
             throw e;
         }
 
-        return exportData;
+        LOGGER.info("Export successful.");
+        return ResponseEntity.ok()
+            .headers(headers)
+            .contentLength(exportData.length)
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .body(exportData);
 
     }
 
