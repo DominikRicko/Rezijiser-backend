@@ -77,7 +77,7 @@ public class ExcelBillExporter extends AbstractExcelExporter<Bill> {
 
         header.createCell(0).setCellValue("Datum dospijeća");
         header.createCell(1).setCellValue("Datum plaćanja");
-        header.createCell(2).setCellValue("Iznos plaćanja");
+        header.createCell(2).setCellValue("Iznos plaćanja [HRK]");
         header.createCell(3).setCellValue("Potrošnja");
 
         for (Bill bill : bills) {
@@ -129,28 +129,28 @@ public class ExcelBillExporter extends AbstractExcelExporter<Bill> {
         row.createCell(8).setCellValue("Telekom");
 
         row = sheet.createRow(3);
-        row.createCell(0).setCellValue("Ukupna potrošnja");
+        row.createCell(0).setCellValue("Ukupna potrošnja [HRK]");
         for(int i = 0; i < 8; i++){
             if(total.get(i) != null)
                 row.createCell(i + 1).setCellValue(total.get(i).toString());
         }
 
         row = sheet.createRow(4);
-        row.createCell(0).setCellValue("Najveći iznos");
+        row.createCell(0).setCellValue("Najveći iznos [HRK]");
         for(int i = 0; i < 8; i++){
             if(maximal.get(i) != null)
                 row.createCell(i + 1).setCellValue(maximal.get(i).toString());
         }
 
         row = sheet.createRow(5);
-        row.createCell(0).setCellValue("Najmanji iznos");
+        row.createCell(0).setCellValue("Najmanji iznos [HRK]");
         for(int i = 0; i < 8; i++){
             if(minimal.get(i) != null)
                 row.createCell(i + 1).setCellValue(minimal.get(i).toString());
         }
 
         row = sheet.createRow(6);
-        row.createCell(0).setCellValue("Ukupno");
+        row.createCell(0).setCellValue("Ukupno [HRK]");
         row.createCell(1).setCellValue(getTotalInCollection(total).toString());
 
         for(int i = 0; i < 9; i++){

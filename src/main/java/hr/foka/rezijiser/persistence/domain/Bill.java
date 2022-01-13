@@ -23,7 +23,24 @@ import hr.foka.rezijiser.persistence.service.ZonedDateTimeConverter;
 public class Bill {
     
     public static enum Type{
-        POWER, WATER, GAS, RESERVATION, TRASH, COMMUNAL, HRT, TELECOMMUNICATION
+        POWER("Struja"), 
+        WATER("Voda"), 
+        GAS("Plin"), 
+        RESERVATION("Pričuva"), 
+        TRASH("Smeće"), 
+        COMMUNAL("Komunalac"), 
+        HRT("HRT"), 
+        TELECOMMUNICATION("Telekom");
+
+        private Type(String croatianName){
+            this.croatianName = croatianName;
+        }
+        
+        public String getCroatianName(){
+            return croatianName;
+        }
+        private final String croatianName;
+
     }
 
     @Id

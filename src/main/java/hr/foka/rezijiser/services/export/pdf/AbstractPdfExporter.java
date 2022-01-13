@@ -84,13 +84,13 @@ public abstract class AbstractPdfExporter<T> implements PdfExporter<T> {
     protected Boolean _exportToDocument(Document document, ExportResource<T> objects){
         try{
             return export(document, objects);
-        } catch (DocumentException e){
+        } catch (DocumentException | IOException e){
             LOGGER.error("Could not export data to PDF document", e);
             return false;
         }
         
     }
     
-    protected abstract Boolean export(Document document, ExportResource<T> objects) throws DocumentException;
+    protected abstract Boolean export(Document document, ExportResource<T> objects) throws DocumentException, IOException;
 
 }

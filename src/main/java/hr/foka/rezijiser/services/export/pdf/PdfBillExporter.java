@@ -1,5 +1,6 @@
 package hr.foka.rezijiser.services.export.pdf;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,8 +15,10 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfDiv;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
@@ -36,10 +39,12 @@ public class PdfBillExporter extends AbstractPdfExporter<Bill> {
     public static final String KEY_ENDING_DATE = "pdf_ending_date";
 
     @Override
-    protected Boolean export(Document document, ExportResource<Bill> bills) throws DocumentException {
+    protected Boolean export(Document document, ExportResource<Bill> bills) throws DocumentException, IOException {
 
         Collection<Bill> data = bills.getData().stream().sorted(this::sortCollectionByPayday)
                 .collect(Collectors.toList());
+
+        document.open();
 
         document.addAuthor("Rezijiser");
 
@@ -60,76 +65,86 @@ public class PdfBillExporter extends AbstractPdfExporter<Bill> {
 
     }
 
-    private void generateReportPage(Document document, ExportResource<Bill> bills) throws DocumentException{
+    private void generateReportPage(Document document, ExportResource<Bill> bills) throws DocumentException, IOException{
 
         LocalDate startingDate = (LocalDate) bills.getMetadata().get(KEY_STARTING_DATE);
         LocalDate endingDate = (LocalDate) bills.getMetadata().get(KEY_ENDING_DATE);
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        Font font = getFont();    
 
         document.addTitle(String.format("Izvještaj o režijima između %s i %s", startingDate.toString(), endingDate.toString()));
 
         BigDecimal totalCost = getTotalInCollection(bills.getData().stream().map(Bill::getCost).collect(Collectors.toList()));
         StringBuilder builder = new StringBuilder();
         builder.append("U periodu od ").append(startingDate.toString()).append(" do ").append(endingDate.toString());
-        builder.append("su sveukupne režije iznosile ").append(totalCost.toString()).append(" HRK.");
+        builder.append(" su sveukupne režije iznosile ").append(totalCost.toString()).append(" HRK.");
 
         Chunk chunk = new Chunk(builder.toString(), font);
-        document.add(chunk);
+        document.add(new Paragraph(chunk));
 
         List<BigDecimal> total = new ArrayList<>();
         List<BigDecimal> minimal = new ArrayList<>();
         List<BigDecimal> maximal = new ArrayList<>();
 
         findStats(bills.getData(), total, minimal, maximal);
-
         List<String> totalString = total.stream().map(BigDecimal::toString).collect(Collectors.toList());
-        totalString.add(0, "Ukupno plaćeni iznos");
-
         List<String> minimalString = minimal.stream().map(BigDecimal::toString).collect(Collectors.toList());
-        minimalString.add(0, "Najmanji plaćeni iznos");
-
         List<String> maximalString = maximal.stream().map(BigDecimal::toString).collect(Collectors.toList());
-        maximalString.add(0, "Najveći plaćeni iznos");
 
-        PdfPTable table = new PdfPTable(9);
-        addTableHeaders(table, Arrays.asList("", "Struja", "Voda", "Plin", "Pričuva", "Smeće", "Komunalac", "HRT", "Telekom"));
-        addRow(table, totalString);
-        addRow(table, minimalString);
-        addRow(table, maximalString);
+        PdfPTable table = new PdfPTable(4);
+        addTableHeaders(table, Arrays.asList("", "Ukupno plaćeni iznos [HRK]", "Najmanji plaćeni iznos [HRK]", "Najveći plaćeni iznos [HRK]"));
+        addRow(table, Arrays.asList("Struja", totalString.get(0), minimalString.get(0), maximalString.get(0)));
+        addRow(table, Arrays.asList("Voda", totalString.get(1), minimalString.get(1), maximalString.get(1)));
+        addRow(table, Arrays.asList("Plin", totalString.get(2), minimalString.get(2), maximalString.get(2)));
+        addRow(table, Arrays.asList("Pričuva", totalString.get(3), minimalString.get(3), maximalString.get(3)));
+        addRow(table, Arrays.asList("Smeće", totalString.get(4), minimalString.get(4), maximalString.get(4)));
+        addRow(table, Arrays.asList("Komunalac", totalString.get(5), minimalString.get(5), maximalString.get(5)));
+        addRow(table, Arrays.asList("HRT", totalString.get(6), minimalString.get(6), maximalString.get(6)));
+        addRow(table, Arrays.asList("Telekom", totalString.get(7), minimalString.get(7), maximalString.get(7)));
 
-        document.add(table);
-
+        PdfDiv div = new PdfDiv();
+        div.addElement(table);
+        div.setPaddingTop((float) 50);
+        document.add(div);
     }
 
-    private void generateBillPage(Document document, Collection<Bill> bills, Type type) throws DocumentException {
+    private void generateBillPage(Document document, Collection<Bill> bills, Type type) throws DocumentException, IOException {
         bills = bills.stream().filter(it -> it.getType() == type).collect(Collectors.toList());
         document.newPage();
 
-        document.addHeader(type.name(), type.name());
+        document.add(new Paragraph(new Phrase(type.getCroatianName(), getFont())));
         PdfPTable table = new PdfPTable(4);
-        addTableHeaders(table, Arrays.asList("Datum dospijeća", "Datum plaćanja", "Iznos plaćanja", "Potrošnja"));
+        addTableHeaders(table, Arrays.asList("Datum dospijeća", "Datum plaćanja", "Iznos plaćanja [HRK]", "Potrošnja"));
 
         for(Bill bill : bills) {
             addRow(table, bill);
         }
 
-        document.add(table);
+        PdfDiv div = new PdfDiv();
+        div.addElement(table);
+        div.setPaddingTop((float) 50);
+        document.add(div);
 
     }
 
-    private void addTableHeaders(PdfPTable table, Collection<String> headers) {
+    private void addTableHeaders(PdfPTable table, Collection<String> headers) throws DocumentException, IOException {
+
+        Font unicodeFont = getFont();
+
         for(String header : headers){
             PdfPCell headerCell = new PdfPCell();
             headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
             headerCell.setBorderWidth(2);
-            headerCell.setPhrase(new Phrase(header));
+            headerCell.setPhrase(new Phrase(header, unicodeFont));
             table.addCell(headerCell);
         }
     }
 
-    private void addRow(PdfPTable table, Collection<String> data) {
+    private void addRow(PdfPTable table, Collection<String> data) throws DocumentException, IOException {
+
+        Font unicodeFont = getFont();
+
         for(String cellData : data){
-            table.addCell(cellData);
+            table.addCell(new Phrase(cellData, unicodeFont));
         }
     }
 
@@ -232,6 +247,10 @@ public class PdfBillExporter extends AbstractPdfExporter<Bill> {
 
     private int sortCollectionByPayday(Bill bill1, Bill bill2) {
         return bill1.getPayday().compareTo(bill2.getPayday());
+    }
+
+    private Font getFont() throws DocumentException, IOException{
+        return new Font(BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, true));
     }
 
 }
