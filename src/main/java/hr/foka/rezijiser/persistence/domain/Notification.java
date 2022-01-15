@@ -19,7 +19,7 @@ import hr.foka.rezijiser.persistence.service.ZonedDateTimeConverter;
 public class Notification {
 
     public static enum Level{
-        INFO, WARNING, ERROR
+        INFO, WARNING, CRITICAL
     }
 
     @Id

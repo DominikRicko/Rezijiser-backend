@@ -1,0 +1,1 @@
+ALTER TABLE bill MODIFY date_paid DATE NULL;
