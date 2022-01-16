@@ -9,7 +9,7 @@ public class HrtResource extends CommonResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(HrtResource.class.getName());
+        StringBuilder builder = new StringBuilder(HrtResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", cost=").append(cost);

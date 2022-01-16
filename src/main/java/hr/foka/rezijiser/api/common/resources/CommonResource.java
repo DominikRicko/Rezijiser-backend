@@ -54,7 +54,7 @@ public abstract class CommonResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(CommonResource.class.getName());
+        StringBuilder builder = new StringBuilder(CommonResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", cost=").append(cost);

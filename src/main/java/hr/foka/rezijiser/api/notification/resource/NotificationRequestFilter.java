@@ -62,7 +62,7 @@ public class NotificationRequestFilter {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(NotificationRequestFilter.class.getName());
+        StringBuilder builder = new StringBuilder(NotificationRequestFilter.class.getSimpleName());
         builder.append(" [");
         builder.append("op=").append(op);
         builder.append(", col=").append(col);

@@ -66,7 +66,7 @@ public class ResourceRequestFilter {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(ResourceRequestFilter.class.getName());
+        StringBuilder builder = new StringBuilder(ResourceRequestFilter.class.getSimpleName());
         builder.append(" [");
         builder.append("op=").append(op);
         builder.append(", col=").append(col);

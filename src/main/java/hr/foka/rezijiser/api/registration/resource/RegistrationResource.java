@@ -52,7 +52,7 @@ public class RegistrationResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(RegistrationResource.class.getName());
+        StringBuilder builder = new StringBuilder(RegistrationResource.class.getSimpleName());
         builder.append(" [");
         builder.append("name=").append(name);
         builder.append(", surname=").append(surname);

@@ -52,7 +52,7 @@ public class UserResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(UserResource.class.getName());
+        StringBuilder builder = new StringBuilder(UserResource.class.getSimpleName());
         builder.append(" [");
         builder.append("email=").append(email);
         builder.append(", name=").append(name);

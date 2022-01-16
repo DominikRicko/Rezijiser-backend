@@ -9,7 +9,7 @@ public class ReservationResource extends CommonResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(ReservationResource.class.getName());
+        StringBuilder builder = new StringBuilder(ReservationResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", cost=").append(cost);

@@ -21,7 +21,7 @@ public class GasResource extends CommonResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(GasResource.class.getName());
+        StringBuilder builder = new StringBuilder(GasResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", cost=").append(cost);

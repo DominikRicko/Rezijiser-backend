@@ -21,7 +21,7 @@ public class PowerResource extends CommonResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(PowerResource.class.getName());
+        StringBuilder builder = new StringBuilder(PowerResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", cost=").append(cost);

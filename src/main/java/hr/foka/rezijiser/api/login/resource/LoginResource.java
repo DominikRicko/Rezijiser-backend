@@ -30,7 +30,7 @@ public class LoginResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(LoginResource.class.getName());
+        StringBuilder builder = new StringBuilder(LoginResource.class.getSimpleName());
         builder.append(" [");
         builder.append("email=").append(email);
         //builder.append(", password=").append(password);

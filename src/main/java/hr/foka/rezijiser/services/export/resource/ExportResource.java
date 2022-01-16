@@ -29,7 +29,7 @@ public class ExportResource<T> {
     
     @Override
     public String toString(){
-        StringBuilder builder = new StringBuilder(ExportResource.class.getName());
+        StringBuilder builder = new StringBuilder(ExportResource.class.getSimpleName());
         builder.append("[");
         builder.append("metadata=").append(metadata);
         builder.append(", data.count=").append(data.size());

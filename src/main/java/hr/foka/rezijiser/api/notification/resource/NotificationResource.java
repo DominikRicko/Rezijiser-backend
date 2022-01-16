@@ -76,7 +76,7 @@ public class NotificationResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(NotificationResource.class.getName());
+        StringBuilder builder = new StringBuilder(NotificationResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", level=").append(level);

@@ -142,7 +142,7 @@ public class User implements UserDetails {
     }
 
     public String toString() {
-        StringBuilder builder = new StringBuilder(User.class.getName());
+        StringBuilder builder = new StringBuilder(User.class.getSimpleName());
         builder.append(" [");
         builder.append("name=").append(name);
         builder.append(", surname=").append(surname);

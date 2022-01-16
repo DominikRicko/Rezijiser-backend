@@ -68,7 +68,7 @@ public class NotificationRequest {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(NotificationResource.class.getName());
+        StringBuilder builder = new StringBuilder(NotificationResource.class.getSimpleName());
         builder.append(" [");
         builder.append("pageNumber=").append(pageNumber);
         builder.append(", pageSize=").append(pageSize);

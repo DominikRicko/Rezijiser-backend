@@ -118,7 +118,7 @@ public class Notification {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(Notification.class.getName());
+        StringBuilder builder = new StringBuilder(Notification.class.getSimpleName());
         builder.append("[");
         builder.append("id=").append(id);
         builder.append(", user=").append(user);

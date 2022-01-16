@@ -44,7 +44,7 @@ public class ExportRequestResource {
 
     @Override
     public String toString(){
-        StringBuilder builder = new StringBuilder(ExportRequestResource.class.getName());
+        StringBuilder builder = new StringBuilder(ExportRequestResource.class.getSimpleName());
         builder.append("[");
         builder.append("exportType=").append(exportType);
         builder.append("startingDate=").append(startingDate);

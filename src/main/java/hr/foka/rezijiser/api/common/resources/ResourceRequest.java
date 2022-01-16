@@ -67,7 +67,7 @@ public class ResourceRequest {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(ResourceRequest.class.getName());
+        StringBuilder builder = new StringBuilder(ResourceRequest.class.getSimpleName());
         builder.append(" [");
         builder.append("pageNumber=").append(pageNumber);
         builder.append(", pageSize=").append(pageSize);

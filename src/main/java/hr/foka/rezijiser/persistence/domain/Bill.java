@@ -149,7 +149,7 @@ public class Bill {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(Bill.class.getName());
+        StringBuilder builder = new StringBuilder(Bill.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", user=").append(user);

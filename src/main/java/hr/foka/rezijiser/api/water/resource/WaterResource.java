@@ -21,7 +21,7 @@ public class WaterResource extends CommonResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(WaterResource.class.getName());
+        StringBuilder builder = new StringBuilder(WaterResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(",cost=").append(cost);

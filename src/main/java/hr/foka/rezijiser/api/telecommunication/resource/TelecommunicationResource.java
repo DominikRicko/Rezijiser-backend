@@ -9,7 +9,7 @@ public class TelecommunicationResource extends CommonResource {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(TelecommunicationResource.class.getName());
+        StringBuilder builder = new StringBuilder(TelecommunicationResource.class.getSimpleName());
         builder.append(" [");
         builder.append("id=").append(id);
         builder.append(", cost=").append(cost);
