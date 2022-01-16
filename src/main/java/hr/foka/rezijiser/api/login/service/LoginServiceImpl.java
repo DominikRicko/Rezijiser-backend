@@ -1,11 +1,9 @@
 package hr.foka.rezijiser.api.login.service;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,20 +36,16 @@ public class LoginServiceImpl implements LoginService {
         AbstractAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(resource.getEmail(),
                 resource.getPassword());
 
-        try {
-            Authentication authenticate = authenticationManager.authenticate(authToken);
-            UserDetails user = userDetailsService.loadUserByUsername((String) authenticate.getPrincipal());
+        Authentication authenticate = authenticationManager.authenticate(authToken);
+        UserDetails user = userDetailsService.loadUserByUsername((String) authenticate.getPrincipal());
 
-            String jwtToken = jwtTokenUtil.generateToken(user); 
-            LoginResponseResource response = new LoginResponseResource();
-            response.setToken(jwtToken);
+        String jwtToken = jwtTokenUtil.generateToken(user);
+        LoginResponseResource response = new LoginResponseResource();
+        response.setToken(jwtToken);
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, jwtToken)
-                    .body(response);
-        } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                .body(response);
     }
 
 }

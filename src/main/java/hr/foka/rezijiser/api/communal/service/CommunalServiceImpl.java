@@ -2,6 +2,7 @@ package hr.foka.rezijiser.api.communal.service;
 
 import org.springframework.stereotype.Service;
 
+import hr.foka.rezijiser.api.common.resources.MessageResourceAssembler;
 import hr.foka.rezijiser.api.common.service.AbstractCommonBillResourceService;
 import hr.foka.rezijiser.api.communal.resource.CommunalResource;
 import hr.foka.rezijiser.api.communal.resource.CommunalResourceAssembler;
@@ -18,8 +19,9 @@ public class CommunalServiceImpl extends AbstractCommonBillResourceService<Commu
         CommunalResourceAssembler assembler, 
         BillRepository repository, 
         BillFilteringService filteringService,
-        UserFilteringService userFilteringService) {
-            super(assembler, repository, filteringService, userFilteringService);
+        UserFilteringService userFilteringService,
+        MessageResourceAssembler messageResourceAssembler) {
+            super(assembler, repository, filteringService, userFilteringService, messageResourceAssembler);
     }
 
     @Override

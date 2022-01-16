@@ -2,6 +2,7 @@ package hr.foka.rezijiser.api.reservation.service;
 
 import org.springframework.stereotype.Service;
 
+import hr.foka.rezijiser.api.common.resources.MessageResourceAssembler;
 import hr.foka.rezijiser.api.common.service.AbstractCommonBillResourceService;
 import hr.foka.rezijiser.api.reservation.resource.ReservationResource;
 import hr.foka.rezijiser.api.reservation.resource.ReservationResourceAssembler;
@@ -18,8 +19,9 @@ public class ReservationServiceImpl extends AbstractCommonBillResourceService<Re
         ReservationResourceAssembler assembler, 
         BillRepository repository, 
         BillFilteringService filteringService,
-        UserFilteringService userFilteringService) {
-            super(assembler, repository, filteringService, userFilteringService);
+        UserFilteringService userFilteringService,
+        MessageResourceAssembler messageResourceAssembler) {
+            super(assembler, repository, filteringService, userFilteringService, messageResourceAssembler);
     }
 
     @Override

@@ -1,0 +1,1 @@
+ALTER TABLE notification MODIFY level VARCHAR(8) NOT NULL;

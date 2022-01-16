@@ -27,7 +27,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         if (user.isPresent()) {
             return user.get();
         } else {
-            throw new UsernameNotFoundException("Email: " + username);
+            throw new UsernameNotFoundException("Netočan email ili lozinka.");
         }
     }
 

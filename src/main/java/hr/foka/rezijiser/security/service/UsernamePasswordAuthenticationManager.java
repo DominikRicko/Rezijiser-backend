@@ -31,7 +31,7 @@ public class UsernamePasswordAuthenticationManager implements AuthenticationMana
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             return authentication;
         } else {
-            throw new BadCredentialsException("Password hashes do not match.");
+            throw new BadCredentialsException("Netočan email ili lozinka.");
         }
 
     }

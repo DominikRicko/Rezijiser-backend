@@ -2,8 +2,6 @@ package hr.foka.rezijiser.api.notification.service;
 
 import java.util.Optional;
 
-import javax.persistence.EntityNotFoundException;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import org.springframework.data.domain.Page;
@@ -13,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import hr.foka.rezijiser.api.common.exceptions.EntityNotFoundException;
+import hr.foka.rezijiser.api.common.exceptions.MissingDataException;
 import hr.foka.rezijiser.api.notification.resource.NotificationRequest;
 import hr.foka.rezijiser.api.notification.resource.NotificationResource;
 import hr.foka.rezijiser.api.notification.resource.NotificationResourceAssembler;
@@ -65,16 +65,21 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public ResponseEntity<?> checkNotification(User user, Integer id, Boolean check) {
+
+        if(id == null){
+            throw new MissingDataException("id");
+        }
+
         Optional<Notification> notificationOptional = repository.findById(id);
 
         if (notificationOptional.isEmpty()) {
-            throw new EntityNotFoundException("Notification with id " + id + " not found.");
+            throw new EntityNotFoundException(id);
         }
 
         Notification notification = notificationOptional.get();
 
         if (notification.getUser() != user) {
-            throw new RuntimeException("Notification does not belong to user " + user.getEmail());
+            throw new EntityNotFoundException(id);
         }
 
         notification.setChecked(check);

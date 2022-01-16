@@ -68,6 +68,7 @@ public class ExportServiceImpl implements ExportService {
         ExportResource<Bill> exportResource = null;
         byte[] exportData;
         HttpHeaders headers = new HttpHeaders();
+        Boolean result = false;
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()){
 
@@ -75,17 +76,22 @@ public class ExportServiceImpl implements ExportService {
                 case EXCEL:
                     exportResource = toExcelExportResource(request);
                     exportResource.setData(toCollection(repository.findAll(filter)));
-                    excelExporter.exportToOutputStream(stream, exportResource);
+                    result = excelExporter.exportToOutputStream(stream, exportResource);
                     headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.xlsx");
                     break;
                 case PDF:
                     exportResource = toPdfExportResource(request);
                     exportResource.setData(toCollection(repository.findAll(filter)));
-                    pdfExporter.exportToOutputStream(stream, exportResource);
+                    result = pdfExporter.exportToOutputStream(stream, exportResource);
                     headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.pdf");
                     break;
             }
             
+            if(!result){
+                LOGGER.error("Could not export bills.");
+                throw new RuntimeException("Pogreška pri izvoženju");
+            }
+
             exportData = stream.toByteArray();
         } catch(IOException e){
             LOGGER.error("Could not export bills.", e);
