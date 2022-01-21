@@ -16,15 +16,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final MessageResourceAssembler messageAssembler;
 
-    public ControllerExceptionHandler(
-            MessageResourceAssembler messageResourceAssembler) {
+    public ControllerExceptionHandler(MessageResourceAssembler messageResourceAssembler) {
         this.messageAssembler = messageResourceAssembler;
     }
 
     @ExceptionHandler(MissingDataException.class)
     public ResponseEntity<MessageResource> missingDataExceptionHandler(MissingDataException e) {
-        return new ResponseEntity<>(messageAssembler.assembleMessage(e.getMessage(), Type.ERROR),
-                HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageAssembler.assembleMessage(e.getMessage(), Type.ERROR), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -34,14 +32,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> handleAccessDeniedException(AuthenticationException e) {
-        return new ResponseEntity<>(messageAssembler.assembleMessage(e.getMessage(), Type.ERROR).getMessage(),
-                HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(messageAssembler.assembleMessage(e.getMessage(), Type.ERROR), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MessageResource> handleAllExceptions(Exception e) {
-        return new ResponseEntity<>(messageAssembler.assembleMessage(e.getMessage(), Type.ERROR),
-                HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(messageAssembler.assembleMessage(e.getMessage(), Type.ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
