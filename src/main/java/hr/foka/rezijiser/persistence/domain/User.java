@@ -3,6 +3,7 @@ package hr.foka.rezijiser.persistence.domain;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -154,5 +155,23 @@ public class User implements UserDetails {
         builder.append("]");
         return builder.toString();
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, email, enabled, password, timeCreated, timeModified);
+    }
+
 
 }

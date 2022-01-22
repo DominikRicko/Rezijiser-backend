@@ -46,7 +46,7 @@ public class NotificationController {
     @RequestMapping(method = RequestMethod.GET, path = "/uncheck/{id:.+}")
     public ResponseEntity<?> uncheckNotification(@AuthenticationPrincipal User user, @PathVariable Integer id) {
         LOGGER.debug("Received GET request to uncheck notification with id {}", id);
-        return service.checkNotification(user, id, true);
+        return service.checkNotification(user, id, false);
     }
 
 }

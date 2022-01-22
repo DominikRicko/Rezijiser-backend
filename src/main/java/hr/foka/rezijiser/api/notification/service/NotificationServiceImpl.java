@@ -78,7 +78,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         Notification notification = notificationOptional.get();
 
-        if (notification.getUser() != user) {
+        if (!notification.getUser().equals(user)) {
             throw new EntityNotFoundException(id);
         }
 
