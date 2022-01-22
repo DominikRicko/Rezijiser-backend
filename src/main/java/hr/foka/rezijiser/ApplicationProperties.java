@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "rezijiser")
 public class ApplicationProperties {
-
+    
     private long access_token_validity_minutes;
     private String signing_key;
     private String token_prefix;
@@ -103,7 +103,7 @@ public class ApplicationProperties {
     }
 
     public String getReminderTitle() {
-        return this.reminderTitle;
+        return "Račun za platiti";
     }
 
     public void setReminderTitle(String reminderTitle) {
@@ -111,7 +111,7 @@ public class ApplicationProperties {
     }
 
     public String getReminderMessageTemplate() {
-        return this.reminderMessageTemplate;
+        return "Ne zaboravite platiti račun za %s datuma %s";
     }
 
     public void setReminderMessageTemplate(String reminderMessageTemplate) {
@@ -119,7 +119,7 @@ public class ApplicationProperties {
     }
 
     public String getLateTitle() {
-        return this.lateTitle;
+        return "Neplaćeni račun";
     }
 
     public void setLateTitle(String lateTitle) {
@@ -127,7 +127,7 @@ public class ApplicationProperties {
     }
 
     public String getLateMessageTemplate() {
-        return this.lateMessageTemplate;
+        return "Kasnite sa plaćanjem računa za %s od %s";
     }
 
     public void setLateMessageTemplate(String lateMessageTemplate) {

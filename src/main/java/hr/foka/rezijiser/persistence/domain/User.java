@@ -156,22 +156,4 @@ public class User implements UserDetails {
         return builder.toString();
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof User)) {
-            return false;
-        }
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, surname, email, enabled, password, timeCreated, timeModified);
-    }
-
-
 }
