@@ -3,7 +3,6 @@ package hr.foka.rezijiser.persistence.domain;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;

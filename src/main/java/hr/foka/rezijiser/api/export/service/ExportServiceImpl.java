@@ -70,6 +70,7 @@ public class ExportServiceImpl implements ExportService {
         HttpHeaders headers = new HttpHeaders();
         Boolean result = false;
 
+        headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()){
 
             switch(request.getExportType()){

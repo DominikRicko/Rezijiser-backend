@@ -86,9 +86,9 @@ public class PdfBillExporter extends AbstractPdfExporter<Bill> {
         List<BigDecimal> maximal = new ArrayList<>();
 
         findStats(bills.getData(), total, minimal, maximal);
-        List<String> totalString = total.stream().map(BigDecimal::toString).collect(Collectors.toList());
-        List<String> minimalString = minimal.stream().map(BigDecimal::toString).collect(Collectors.toList());
-        List<String> maximalString = maximal.stream().map(BigDecimal::toString).collect(Collectors.toList());
+        List<String> totalString = total.stream().map(this::convertToString).collect(Collectors.toList());
+        List<String> minimalString = minimal.stream().map(this::convertToString).collect(Collectors.toList());
+        List<String> maximalString = maximal.stream().map(this::convertToString).collect(Collectors.toList());
 
         PdfPTable table = new PdfPTable(4);
         addTableHeaders(table, Arrays.asList("", "Ukupno plaćeni iznos [HRK]", "Najmanji plaćeni iznos [HRK]", "Najveći plaćeni iznos [HRK]"));
@@ -105,6 +105,13 @@ public class PdfBillExporter extends AbstractPdfExporter<Bill> {
         div.addElement(table);
         div.setPaddingTop((float) 50);
         document.add(div);
+    }
+
+    private String convertToString(BigDecimal number){
+        if(number == null){
+            return "-";
+        } else 
+        return number.toString();
     }
 
     private void generateBillPage(Document document, Collection<Bill> bills, Type type) throws DocumentException, IOException {
@@ -148,13 +155,16 @@ public class PdfBillExporter extends AbstractPdfExporter<Bill> {
         }
     }
 
-    private void addRow(PdfPTable table, Bill bill){
+    private void addRow(PdfPTable table, Bill bill) throws DocumentException, IOException{
         table.addCell(bill.getPayday().toString());
         if(bill.getDatePaid() != null) 
             table.addCell(bill.getDatePaid().toString());
-        else 
-            table.addCell("NIJE PLAĆENO");
-
+        else {
+            PdfPCell dataCell = new PdfPCell();
+            dataCell.setPhrase(new Phrase("NIJE PLAĆENO", getFont()));
+            table.addCell(dataCell);
+        }
+        
         table.addCell(bill.getCost().toString());
         if(bill.getSpent() != null)
             table.addCell(bill.getSpent().toString());
