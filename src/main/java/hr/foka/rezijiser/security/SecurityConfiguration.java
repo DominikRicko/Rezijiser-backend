@@ -31,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/login", "/register", "/reset_password", "/error").permitAll();
 		http.authorizeRequests().antMatchers("notep/js/**", "/images/**", "/css/**").permitAll();
 		http.authorizeRequests().antMatchers("/e/**").authenticated();
+		http.authorizeRequests().antMatchers("/web","/web/**").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 		http.httpBasic();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

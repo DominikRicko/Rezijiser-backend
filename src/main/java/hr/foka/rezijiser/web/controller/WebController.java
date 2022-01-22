@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = { "", "/", "/index" })
+@RequestMapping(value = { "/web" })
 public class WebController {
 
     @RequestMapping(method = RequestMethod.GET)
