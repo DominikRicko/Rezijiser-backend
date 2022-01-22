@@ -53,7 +53,7 @@ public class NotificationGenerator {
         LOGGER.info("Notification generator initialized.");
     }
 
-    @Scheduled(cron = "0/20 * * * * ?")//"0 0 8 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     @Async
     public void generateNotification(){
         LOGGER.info("Generating new notifications for missed payments.");
