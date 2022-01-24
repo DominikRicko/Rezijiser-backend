@@ -12,3 +12,18 @@ Afterwards, you can manually start/stop the docker container that gets generated
 To start the project consider using [one of these options](https://spring.io/tools).
 Initial start should run the flyway module to generate sql tables defined in db/migration/init.sql script
 Additional local-machine specific application properties should be handled in a seperate ~spring boot~ application properties profile?
+
+## Deployment
+
+When adding web part to this app, index.html should have 
+```html
+<head>
+    ...
+    <base href="/web/">
+</head>
+
+<body>
+    <script>const global = []</script>
+    ...
+</body>
+```
