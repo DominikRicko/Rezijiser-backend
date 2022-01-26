@@ -10,7 +10,7 @@ public class WebController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String requestMethodName() {
-        return "index.html";
+        return "web/index.html";
     }
 
 }
