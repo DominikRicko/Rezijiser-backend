@@ -1,16 +1,20 @@
 package hr.foka.rezijiser.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = { "/web" })
 public class WebController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String requestMethodName() {
-        return "web/index.html";
+    private static Logger LOGGER = LoggerFactory.getLogger(WebController.class);
+
+    @RequestMapping(method = RequestMethod.GET, value = { "/web", "/web/" })
+    public String getWeb() {
+        LOGGER.info("Received GET request for web index.");
+        return "/index.html";
     }
 
 }
